@@ -10,10 +10,53 @@ class DataType(models.Model):
 
     def __str__(self):
         '''
-        Defines the return string for an `Attribute` db table entry
+        Defines the return string for a `DataType` db table entry
         '''
 
         return self.name
+
+
+class Item(models.Model):
+    '''
+    Defines db table for an `Item`
+    '''
+
+    name = models.CharField(unique=True)
+
+    def __str__(self):
+        '''
+        Defines the return string for an `Item` db table entry
+        '''
+
+        return self.name
+
+
+class Relationship(models.Model):
+    '''
+    Defines db table for a `Relationship` e.g. (Book)<-[WROTE]-(Person)
+    '''
+
+    item = models.ManyToOneField(Item) # Assume this would normally be maximum of two?
+    relationship_str = models.CharField() # e.g. (Book)<-[WROTE]-(Person)
+
+    def save(self, *args, **kwargs):
+        '''
+        Override save method to do validation on the `relationship_str`
+
+         * create relationships to `Item` entries based on input `relationship_str`. If `Item`
+           entries do not exist, create them
+         * Perform some sort of validation on the string itself using a regex.
+           What is the expected makeup of this string?
+        '''
+
+        pass
+
+    def __str__(self):
+        '''
+        Defines the return string for an `Relationship` db table entry
+        '''
+
+        return self.relationship_str
 
 
 class Attribute(models.Model):
@@ -72,13 +115,13 @@ class Measure(models.Model):
 
 
 # It may be better to combine `ABMLink` and `InstanceLink` tables into one `Link` table
-# as the data looks common across both
-class Link(models.Model):
+# if the data looks common across both
+class ABMLink(models.Model):
     '''
-    Defines db table for a `Link`
+    Defines db table for a `ABMLink`
     '''
 
-    relationship = models.CharField()
+    relationship = models.ForeignKey(Relationship)
     instances_value_dtype = models.CharField()
     time_link = models.BooleanField()
     link_criteria = models.CharField()
@@ -91,21 +134,13 @@ class Link(models.Model):
 
         pass
 
-    def __str__(self):
-        '''
-        Defines the return string for an `ABMLink` db table entry
-        '''
-
-        return self.relationship
-
 
 class AbstractBaseModel(models.Model):
     '''
     Defines db table for `AbstractBaseModel`
     '''
 
-    name = models.CharField() # Not unique, but may be useful to `ForeignKey` this so you can link
-                              # ABM entries together
+    master_item = models.ForeignKey(Item)
     attribute = models.ManyToOneField(Attribute)
     measure = models.ManyToOneField(Measure)
     link = models.ManyToOneField(ABMLink)
@@ -148,7 +183,7 @@ class InstanceLink(models.Model):
     Defines db table for `InstanceLink`
     '''
 
-    relationship = models.CharField()
+    relationship = models.ForeignKey(Relationship)
     landing_instance = models.CharField() # Could be a `models.UrlField` if this is always a url
 
     def serialize(self):
@@ -157,13 +192,6 @@ class InstanceLink(models.Model):
         '''
 
         pass
-
-    def __str__(self):
-        '''
-        Defines the return string for an `InstanceLink` db table entry
-        '''
-
-        return self.relationship
 
 
 # Need a bit more information on what a `Link` and a `IncomingInteractionLink` are
@@ -229,3 +257,31 @@ class RankingCluster(models.Model):
     Defines db table for `RankingCluster`
     '''
 
+    # Score choice definition
+    HIGH = 1
+    LOW = 2
+    UNRANKED = 3
+    STATUS_CHOICES = (
+        (HIGH, 'HIGH'),
+        (LOW, 'LOW'),
+        (UNRANKED, 'UNRANKED'),
+    )
+
+    master_item = models.ForeignKey(Item)
+    ranking_feature = models.CharField() # Similar to a search term?
+    relationship = models.ForeignKey(Relationship)
+    score = models.PositiveIntegerField(choices=STATUS_CHOICES, default=UNRANKED)
+    number_of_instances = models.PositiveIntegerField(null=True, blank=True)
+    instances_ranking = models.CharField(null=True, blank=True)
+    links_ranking = models.CharField(null=True, blank=True)
+
+    def update(self, *args, **kwargs):
+        '''
+        Update entry whenever new `Instance` entries are added to the database with
+        a matching `master_item`
+
+        This will then use the `relationship` foreignkeys to update `score`,
+        `number_of_instances`, `instances_ranking` and `links_ranking` fields
+        '''
+
+        pass
