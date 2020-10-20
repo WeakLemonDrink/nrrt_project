@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-10-18T19:44:56.639Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36" etag="zR_inUUlxdPLD6HtvfPF" version="13.8.0" type="github">
+<mxfile host="app.diagrams.net" modified="2020-10-20T16:21:59.962Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36" etag="35qCxefy5QUKmr8wf5n9" version="13.8.1" type="github">
   <diagram name="Page-1" id="efa7a0a1-bf9b-a30e-e6df-94a7791c09e9">
     <mxGraphModel dx="1694" dy="491" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="826" pageHeight="1169" background="#ffffff" math="0" shadow="0">
       <root>
@@ -100,26 +100,16 @@
             <mxPoint x="320" y="555" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="XLXMaAL3mI5uWrxPO-Kz-40" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center ; text-decoration: underline&quot;&gt;&lt;b&gt;RankingCluster&lt;/b&gt;&lt;/p&gt;&lt;hr&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;master_item ForeignKey(Item)&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;ranking_feature CharField&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;relationship ForeignKey(Relationship)&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;score ChoicesField&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;number_of_instances IntegerField&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;instances_ranking CharField&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;links_ranking CharField&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;strokeColor=#003366;shadow=1;fillColor=#D4E1F5;fontColor=#003366" parent="1" vertex="1">
-          <mxGeometry x="610" y="890" width="230" height="140" as="geometry" />
+        <mxCell id="XLXMaAL3mI5uWrxPO-Kz-40" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center ; text-decoration: underline&quot;&gt;&lt;b&gt;RankingCluster&lt;/b&gt;&lt;/p&gt;&lt;hr&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;master_item ForeignKey(Item)&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;ranking_feature JsonField&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;number_of_instances IntegerField&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;instances_ranking JsonField&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;links_ranking JsonField&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;strokeColor=#003366;shadow=1;fillColor=#D4E1F5;fontColor=#003366" parent="1" vertex="1">
+          <mxGeometry x="610" y="890" width="230" height="110" as="geometry" />
         </mxCell>
-        <mxCell id="XLXMaAL3mI5uWrxPO-Kz-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" parent="1" source="XLXMaAL3mI5uWrxPO-Kz-25" target="XLXMaAL3mI5uWrxPO-Kz-40" edge="1">
+        <mxCell id="XLXMaAL3mI5uWrxPO-Kz-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="XLXMaAL3mI5uWrxPO-Kz-25" target="XLXMaAL3mI5uWrxPO-Kz-40" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="-20" y="474.59000000000003" as="sourcePoint" />
             <mxPoint x="550" y="1010" as="targetPoint" />
             <Array as="points">
               <mxPoint y="494" />
-              <mxPoint y="995" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="XLXMaAL3mI5uWrxPO-Kz-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;endArrow=none;endFill=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;" parent="1" source="XLXMaAL3mI5uWrxPO-Kz-37" target="XLXMaAL3mI5uWrxPO-Kz-40" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="200" y="585" as="sourcePoint" />
-            <mxPoint x="320" y="690" as="targetPoint" />
-            <Array as="points">
-              <mxPoint x="220" y="593" />
-              <mxPoint x="220" y="925" />
+              <mxPoint y="945" />
             </Array>
           </mxGeometry>
         </mxCell>
