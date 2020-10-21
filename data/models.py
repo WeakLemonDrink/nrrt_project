@@ -1,3 +1,8 @@
+'''
+Defines all database tables for the `data` django app
+'''
+
+
 from django.db import models
 
 
@@ -6,7 +11,7 @@ class DataType(models.Model):
     Defines db table for `DataType`s
     '''
 
-    name = models.CharField(unique=True) # e.g. VARCHAR, MEASURE, INT etc
+    name = models.CharField(max_length=140, unique=True) # e.g. VARCHAR, MEASURE, INT etc
 
     def __str__(self):
         '''
@@ -21,7 +26,7 @@ class Item(models.Model):
     Defines db table for an `Item`
     '''
 
-    name = models.CharField(unique=True)
+    name = models.CharField(max_length=140, unique=True)
 
     def __str__(self):
         '''
@@ -36,10 +41,10 @@ class Relationship(models.Model):
     Defines db table for a `Relationship` e.g. (Book)<-[WROTE]-(Person)
     '''
 
-    item = models.ManyToOneField(Item) # Assume this would normally be maximum of two?
-    relationship_str = models.CharField() # e.g. (Book)<-[WROTE]-(Person)
+    item = models.ManyToManyField(Item) # Assume this would normally be maximum of two?
+    relationship_str = models.CharField(max_length=140) # e.g. (Book)<-[WROTE]-(Person)
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs): # pylint: disable=arguments-differ, signature-differs
         '''
         Override save method to do validation on the `relationship_str`
 
@@ -48,8 +53,6 @@ class Relationship(models.Model):
          * Perform some sort of validation on the string itself using a regex.
            What is the expected makeup of this string?
         '''
-
-        pass
 
     def __str__(self):
         '''
@@ -64,15 +67,13 @@ class Attribute(models.Model):
     Defines db table for an `Attribute`
     '''
 
-    attribute_name = models.CharField(unique=True) # Is this unique?
-    value_dtype = models.ForeignKey(DataType)
+    attribute_name = models.CharField(max_length=140, unique=True) # Is this unique?
+    value_dtype = models.ForeignKey(DataType, on_delete=models.CASCADE)
 
     def serialize(self):
         '''
         Returns a entry serialized to json format (e.g. when constructing the returned data)
         '''
-
-        pass
 
     def __str__(self):
         '''
@@ -87,24 +88,24 @@ class Measure(models.Model):
     Defines db table for a `Measure`
     '''
 
-    measure_name = models.CharField()
-    measure_type = models.CharField() # This could be limited to a choice if there are limited types,
-                                      # or `ForeignKey` to a db table if you want to search/filter
-                                      # by measure_type
-    unit_of_measurement = models.CharField()
-    value_dtype = models.ForeignKey(DataType)
-    statistic_type = models.CharField() # This could be limited to a choice if there are limited
-                                        # types, or `ForeignKey` to a db table if you want to
-                                        # search/filter by statistic_type
-    measurement_reference_time = models.CharField()
-    measurement_precision = models.CharField()
+    measure_name = models.CharField(max_length=140)
+    measure_type = models.CharField(max_length=140) # This could be limited to a choice if there
+     												# are limited types, or `ForeignKey` to a db
+     												# table if you want to search/filter by
+     												# measure_type
+    unit_of_measurement = models.CharField(max_length=140)
+    value_dtype = models.ForeignKey(DataType, on_delete=models.CASCADE)
+    statistic_type = models.CharField(max_length=140) # This could be limited to a choice if
+    												  # there are limited types, or `ForeignKey`
+    												  # to a db table if you want to search/filter
+    												  # by statistic_type
+    measurement_reference_time = models.CharField(max_length=140)
+    measurement_precision = models.CharField(max_length=140)
 
     def serialize(self):
         '''
         Returns a entry serialized to json format (e.g. when constructing the returned data)
         '''
-
-        pass
 
     def __str__(self):
         '''
@@ -121,18 +122,17 @@ class ABMLink(models.Model):
     Defines db table for a `ABMLink`
     '''
 
-    relationship = models.ForeignKey(Relationship)
-    instances_value_dtype = models.CharField()
+    relationship = models.ForeignKey(Relationship, on_delete=models.CASCADE)
+    instances_value_dtype = models.CharField(max_length=140)
     time_link = models.BooleanField()
-    link_criteria = models.CharField()
-    values = models.CharField() # Could also be a json field if this is dictionary like
+    link_criteria = models.CharField(max_length=140)
+    values = models.CharField(max_length=140) # Could also be a json field if this is dictionary
+    										  # like
 
     def serialize(self):
         '''
         Returns a entry serialized to json format (e.g. when constructing the returned data)
         '''
-
-        pass
 
 
 class AbstractBaseModel(models.Model):
@@ -140,10 +140,10 @@ class AbstractBaseModel(models.Model):
     Defines db table for `AbstractBaseModel`
     '''
 
-    master_item = models.ForeignKey(Item)
-    attribute = models.ManyToOneField(Attribute)
-    measure = models.ManyToOneField(Measure)
-    link = models.ManyToOneField(ABMLink)
+    master_item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    attribute = models.ManyToManyField(Attribute)
+    measure = models.ManyToManyField(Measure)
+    link = models.ManyToManyField(ABMLink)
 
     def serialize(self):
         '''
@@ -158,23 +158,16 @@ class AbstractBaseModel(models.Model):
             'LINK': []
         }
 
-        for attribute in self.attribute.objects.all():
+        for attribute in self.attribute.all():
             return_data['ATTR'].append(attribute.serialize())
 
-        for measure in self.measure.objects.all():
+        for measure in self.measure.all():
             return_data['MEAS'].append(measure.serialize())
 
-        for link in self.link.objects.all():
+        for link in self.link.all():
             return_data['LINK'].append(link.serialize())
 
         return return_data
-
-    def __str__(self):
-        '''
-        Defines the return string for an `AbstractBaseModel` db table entry
-        '''
-
-        return self.name
 
 
 # See `ABMLink` above
@@ -183,15 +176,14 @@ class InstanceLink(models.Model):
     Defines db table for `InstanceLink`
     '''
 
-    relationship = models.ForeignKey(Relationship)
-    landing_instance = models.CharField() # Could be a `models.UrlField` if this is always a url
+    relationship = models.ForeignKey(Relationship, on_delete=models.CASCADE)
+    landing_instance = models.CharField(max_length=140) # Could be a `models.UrlField` if this is
+    													# always a url
 
     def serialize(self):
         '''
         Returns a entry serialized to json format (e.g. when constructing the returned data)
         '''
-
-        pass
 
 
 # Need a bit more information on what a `Link` and a `IncomingInteractionLink` are
@@ -200,15 +192,14 @@ class IncomingInteractionLink(models.Model):
     Defines db table for `IncomingInteractionLink`
     '''
 
-    relationship = models.CharField()
-    origin_instance = models.CharField() # Could be a `models.UrlField` if this is always a url
+    relationship = models.CharField(max_length=140)
+    origin_instance = models.CharField(max_length=140) # Could be a `models.UrlField` if this is
+    												   # always a url
 
     def serialize(self):
         '''
         Returns a entry serialized to json format (e.g. when constructing the returned data)
         '''
-
-        pass
 
     def __str__(self):
         '''
@@ -223,11 +214,11 @@ class Instance(models.Model):
     Defines db table for `Instance`
     '''
 
-    abm = models.ForeignKey(AbstractBaseModel)
-    attribute = models.JsonField()
-    measure = models.JsonField()
-    link = models.ManyToOneField(InstanceLink) # e.g. (Book)<-[WROTE]-(Person)
-    iil = models.ManyToOneField(IncomingInteractionLink)
+    abm = models.ForeignKey(AbstractBaseModel, on_delete=models.CASCADE)
+    attribute = models.CharField(max_length=140)
+    measure = models.CharField(max_length=140)
+    link = models.ManyToManyField(InstanceLink) # e.g. (Book)<-[WROTE]-(Person)
+    iil = models.ManyToManyField(IncomingInteractionLink)
 
     def serialize(self):
         '''
@@ -243,10 +234,10 @@ class Instance(models.Model):
             'IIL': []
         }
 
-        for link in self.link.objects.all():
+        for link in self.link.all():
             return_data['LINK'].append(link.serialize())
 
-        for iil in self.iil.objects.all():
+        for iil in self.iil.all():
             return_data['IIL'].append(iil.serialize())
 
         return return_data
@@ -257,23 +248,11 @@ class RankingCluster(models.Model):
     Defines db table for `RankingCluster`
     '''
 
-    # Score choice definition
-    HIGH = 1
-    LOW = 2
-    UNRANKED = 3
-    STATUS_CHOICES = (
-        (HIGH, 'HIGH'),
-        (LOW, 'LOW'),
-        (UNRANKED, 'UNRANKED'),
-    )
-
-    master_item = models.ForeignKey(Item)
-    ranking_feature = models.CharField() # Similar to a search term?
-    relationship = models.ForeignKey(Relationship)
-    score = models.PositiveIntegerField(choices=STATUS_CHOICES, default=UNRANKED)
+    master_item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    ranking_feature = models.CharField(max_length=140, null=True, blank=True)
     number_of_instances = models.PositiveIntegerField(null=True, blank=True)
-    instances_ranking = models.CharField(null=True, blank=True)
-    links_ranking = models.CharField(null=True, blank=True)
+    instances_ranking = models.CharField(max_length=140, null=True, blank=True)
+    links_ranking = models.CharField(max_length=140, null=True, blank=True)
 
     def update(self, *args, **kwargs):
         '''
@@ -283,5 +262,3 @@ class RankingCluster(models.Model):
         This will then use the `relationship` foreignkeys to update `score`,
         `number_of_instances`, `instances_ranking` and `links_ranking` fields
         '''
-
-        pass
