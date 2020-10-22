@@ -13,6 +13,16 @@ class DataType(models.Model):
 
     name = models.CharField(max_length=140, unique=True) # e.g. VARCHAR, MEASURE, INT etc
 
+    def save(self, *args, **kwargs): # pylint: disable=signature-differs
+        '''
+        Override default save method to set `name` field contents to upper case
+        '''
+
+        self.name = self.name.upper()
+
+        # Call default inherited save
+        super().save(*args, **kwargs)
+
     def __str__(self):
         '''
         Defines the return string for a `DataType` db table entry
@@ -27,6 +37,16 @@ class Item(models.Model):
     '''
 
     name = models.CharField(max_length=140, unique=True)
+
+    def save(self, *args, **kwargs): # pylint: disable=signature-differs
+        '''
+        Override default save method to set `name` field contents to title case
+        '''
+
+        self.name = self.name.capitalize()
+
+        # Call default inherited save
+        super().save(*args, **kwargs)
 
     def __str__(self):
         '''
@@ -44,7 +64,7 @@ class Relationship(models.Model):
     item = models.ManyToManyField(Item) # Assume this would normally be maximum of two?
     relationship_str = models.CharField(max_length=140) # e.g. (Book)<-[WROTE]-(Person)
 
-    def save(self, *args, **kwargs): # pylint: disable=arguments-differ, signature-differs
+    def save(self, *args, **kwargs): # pylint: disable=signature-differs
         '''
         Override save method to do validation on the `relationship_str`
 
@@ -53,6 +73,8 @@ class Relationship(models.Model):
          * Perform some sort of validation on the string itself using a regex.
            What is the expected makeup of this string?
         '''
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         '''
@@ -90,15 +112,15 @@ class Measure(models.Model):
 
     measure_name = models.CharField(max_length=140)
     measure_type = models.CharField(max_length=140) # This could be limited to a choice if there
-     												# are limited types, or `ForeignKey` to a db
-     												# table if you want to search/filter by
-     												# measure_type
+                                                    # are limited types, or `ForeignKey` to a db
+                                                    # table if you want to search/filter by
+                                                    # measure_type
     unit_of_measurement = models.CharField(max_length=140)
     value_dtype = models.ForeignKey(DataType, on_delete=models.CASCADE)
     statistic_type = models.CharField(max_length=140) # This could be limited to a choice if
-    												  # there are limited types, or `ForeignKey`
-    												  # to a db table if you want to search/filter
-    												  # by statistic_type
+                                                      # there are limited types, or `ForeignKey`
+                                                      # to a db table if you want to search/filter
+                                                      # by statistic_type
     measurement_reference_time = models.CharField(max_length=140)
     measurement_precision = models.CharField(max_length=140)
 
@@ -127,7 +149,7 @@ class ABMLink(models.Model):
     time_link = models.BooleanField()
     link_criteria = models.CharField(max_length=140)
     values = models.CharField(max_length=140) # Could also be a json field if this is dictionary
-    										  # like
+                                              # like
 
     def serialize(self):
         '''
@@ -178,7 +200,7 @@ class InstanceLink(models.Model):
 
     relationship = models.ForeignKey(Relationship, on_delete=models.CASCADE)
     landing_instance = models.CharField(max_length=140) # Could be a `models.UrlField` if this is
-    													# always a url
+                                                        # always a url
 
     def serialize(self):
         '''
@@ -194,7 +216,7 @@ class IncomingInteractionLink(models.Model):
 
     relationship = models.CharField(max_length=140)
     origin_instance = models.CharField(max_length=140) # Could be a `models.UrlField` if this is
-    												   # always a url
+                                                       # always a url
 
     def serialize(self):
         '''
