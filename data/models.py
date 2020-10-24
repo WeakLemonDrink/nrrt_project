@@ -137,11 +137,11 @@ class Measure(models.Model):
         return self.measure_name
 
 
-# It may be better to combine `ABMLink` and `InstanceLink` tables into one `Link` table
+# It may be better to combine `AMLink` and `InstanceLink` tables into one `Link` table
 # if the data looks common across both
-class ABMLink(models.Model):
+class AMLink(models.Model):
     '''
-    Defines db table for a `ABMLink`
+    Defines db table for a `AMLink`
     '''
 
     relationship = models.ForeignKey(Relationship, on_delete=models.CASCADE)
@@ -157,15 +157,15 @@ class ABMLink(models.Model):
         '''
 
 
-class AbstractBaseModel(models.Model):
+class AbstractModel(models.Model):
     '''
-    Defines db table for `AbstractBaseModel`
+    Defines db table for `AbstractModel`
     '''
 
     master_item = models.ForeignKey(Item, on_delete=models.CASCADE)
     attribute = models.ManyToManyField(Attribute)
     measure = models.ManyToManyField(Measure)
-    link = models.ManyToManyField(ABMLink)
+    link = models.ManyToManyField(AMLink)
 
     def serialize(self):
         '''
@@ -192,7 +192,7 @@ class AbstractBaseModel(models.Model):
         return return_data
 
 
-# See `ABMLink` above
+# See `AMLink` above
 class InstanceLink(models.Model):
     '''
     Defines db table for `InstanceLink`
@@ -236,7 +236,7 @@ class Instance(models.Model):
     Defines db table for `Instance`
     '''
 
-    abm = models.ForeignKey(AbstractBaseModel, on_delete=models.CASCADE)
+    abm = models.ForeignKey(AbstractModel, on_delete=models.CASCADE)
     attribute = models.CharField(max_length=140)
     measure = models.CharField(max_length=140)
     link = models.ManyToManyField(InstanceLink) # e.g. (Book)<-[WROTE]-(Person)
