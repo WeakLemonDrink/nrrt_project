@@ -1,0 +1,5 @@
+25/10/20
+
+We could start creating in intial dataset for DataTypes, I assume there will be a set amount of these?
+
+What is AMLink.instances_value_dtype for? Is it just a reference to the abstract model?

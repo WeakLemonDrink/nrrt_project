@@ -9,6 +9,8 @@ from rest_framework.routers import DefaultRouter
 from data import views
 
 
+app_name = 'data'
+
 # Register drf views
 router = DefaultRouter()
 

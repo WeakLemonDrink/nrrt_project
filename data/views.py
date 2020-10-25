@@ -14,5 +14,6 @@ class AbstractModelViewSet(viewsets.ModelViewSet):
     `update` and `destroy` actions for `AbstractModel` entries
     '''
 
+    model = models.AbstractModel
     queryset = models.AbstractModel.objects.all()
     serializer_class = serializers.AbstractModelSerializer

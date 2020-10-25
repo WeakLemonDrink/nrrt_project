@@ -89,8 +89,8 @@ class Attribute(models.Model):
     Defines db table for an `Attribute`
     '''
 
-    attribute_name = models.CharField(max_length=140, unique=True) # Is this unique?
-    value_dtype = models.ForeignKey(DataType, on_delete=models.CASCADE)
+    name = models.CharField(max_length=140, unique=True) # Is this unique?
+    dtype = models.ForeignKey(DataType, on_delete=models.CASCADE)
 
     def serialize(self):
         '''
@@ -102,7 +102,7 @@ class Attribute(models.Model):
         Defines the return string for an `Attribute` db table entry
         '''
 
-        return self.attribute_name
+        return self.name
 
 
 class Measure(models.Model):
@@ -110,7 +110,7 @@ class Measure(models.Model):
     Defines db table for a `Measure`
     '''
 
-    measure_name = models.CharField(max_length=140)
+    name = models.CharField(max_length=140)
     measure_type = models.CharField(max_length=140) # This could be limited to a choice if there
                                                     # are limited types, or `ForeignKey` to a db
                                                     # table if you want to search/filter by
@@ -134,7 +134,7 @@ class Measure(models.Model):
         Defines the return string for an `Measure` db table entry
         '''
 
-        return self.measure_name
+        return self.name
 
 
 # It may be better to combine `AMLink` and `InstanceLink` tables into one `Link` table
