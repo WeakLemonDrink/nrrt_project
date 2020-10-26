@@ -1,0 +1,49 @@
+{
+    "master_item": "Book",
+    "attribute": [
+        {
+            "attribute_name": "title",
+            "value_dtype": "VARCHAR"
+        },
+        {
+            "attribute_name": "category",
+            "value_dtype": "VARCHAR"
+        }
+    ],
+    "measure": [
+        {
+            "measure_name": "pages",
+            "measure_type": "count",
+            "unit_of_measurement": "Page",
+            "value_dtype": "INT",
+            "statistic_type": "observation (default)",
+            "measurement_reference_time": "__self__",
+            "measurement_precision": "±(default=NULL)"
+        },
+        {
+            "measure_name": "published_date",
+            "measure_type": "time",
+            "unit_of_measurement": "TIMESTAMP",
+            "value_dtype": "TIMESTAMP",
+            "statistic_type": "observation (default)",
+            "measurement_reference_time": "__self__",
+            "measurement_precision": "±(default=NULL)"
+        }
+    ],
+    "link": [
+        {
+            "relationship": "(Book)<-[WROTE]-(Person)",
+            "instances_value_dtype": "ABM/Person/1",
+            "time_link": "False",
+            "link_criteria": "best_rated",
+            "values": "{\"Person\": {\"name\": \"__input__\"}}"
+        },
+        {
+            "relationship": "(Book)<-[ABOUT]-(Review)",
+            "instances_value_dtype": "ABM/Review/1",
+            "time_link": "False",
+            "link_criteria": "direct",
+            "values": "{\"Review\": {\"title\": \"__input__\", \"score\": \"__input__\"}}"
+        }
+    ]
+}

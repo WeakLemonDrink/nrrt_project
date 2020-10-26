@@ -23,6 +23,19 @@ class AttributeSerializer(serializers.ModelSerializer):
         fields = ['attribute_name', 'value_dtype']
         model = models.Attribute
 
+    def save(self): # pylint: disable=arguments-differ
+        '''
+        save method creates or updates a single db entry
+        '''
+
+        # Get or create `DataType` entry first
+        data_type, _ = models.DataType.objects.get_or_create(
+            name=self.validated_data['dtype']['__str__']
+        )
+
+        # Then get or create `Attribute`
+        models.Attribute.objects.get_or_create(name=self.validated_data['name'], dtype=data_type)
+
 
 class MeasureSerializer(serializers.ModelSerializer):
     '''
@@ -55,6 +68,7 @@ class AbstractModelSerializer(serializers.ModelSerializer):
     Serializer for the `AbstractModel` model
     '''
 
+    master_item = serializers.CharField(source='master_item.__str__')
     attribute = AttributeSerializer(many=True)
     measure = MeasureSerializer(many=True)
     link = AMLinkSerializer(many=True)
@@ -62,3 +76,18 @@ class AbstractModelSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('__all__')
         model = models.AbstractModel
+
+    def save(self): # pylint: disable=arguments-differ
+        '''
+        save method creates or updates new db entries
+        '''
+
+        # Get or create `Item` entry
+        models.Item.objects.get_or_create(name=self.validated_data['master_item']['__str__'])
+
+        # Call `AttributeSerializer with the data to save to new `Attribute` entries
+        attribute_serializer = AttributeSerializer(data=self.initial_data['attribute'], many=True)
+
+        # Call `is_valid()` required before we call `save()`
+        attribute_serializer.is_valid()
+        attribute_serializer.save()
