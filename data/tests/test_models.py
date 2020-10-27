@@ -64,3 +64,53 @@ class ItemModelTests(TestCase):
         '''
 
         self.assertEqual(str(self.entry), self.entry.name)
+
+
+class RelationshipModelTests(TestCase):
+    '''
+    TestCase class for the `Relationship` model
+    '''
+
+    def setUp(self):
+        '''
+        Common setup for each test definition
+        '''
+
+        self.entry = models.Relationship.objects.create(
+            relationship_str='(Book)<-[WROTE]-(Person)'
+        )
+
+    def test_save_method_creates_book_item(self):
+        '''
+        `Relationship` save method should use strings in the input `relationship_str` to create
+        new `Item` entries that can be linked via a `ManyToMany` relationship field
+
+        The input `relationship_str` e.g. (Book)<-[WROTE]-(Person) contains `Item` entries in
+        between the brackets
+        '''
+
+        # Confirm that the creation of `self.entry` has also created a new `Book` `Item` entry
+        self.assertTrue(models.Item.objects.filter(name='Book').exists())
+
+    def test_save_method_creates_person_item(self):
+        '''
+        `Relationship` save method should use strings in the input `relationship_str` to create
+        new `Item` entries that can be linked via a `ManyToMany` relationship field
+
+        The input `relationship_str` e.g. (Book)<-[WROTE]-(Person) contains `Item` entries in
+        between the brackets
+        '''
+
+        # Confirm that the creation of `self.entry` has also created a new `Person` `Item` entry
+        self.assertTrue(models.Item.objects.filter(name='Person').exists())
+
+    def test_save_method_links_book_person_items_to_entry(self):
+        '''
+        `Relationship` save method should use strings in the input `relationship_str` to create
+        new `Item` entries that can be linked via a `ManyToMany` relationship field
+
+        Two new `Item` entries should be linked to the new `Relationship` entry via a `ManyToMany`
+        field
+        '''
+
+        self.assertEqual(self.entry.item.all().count(), 2)

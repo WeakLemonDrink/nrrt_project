@@ -3,6 +3,8 @@ Defines all database tables for the `data` django app
 '''
 
 
+import re
+
 from django.db import models
 
 
@@ -74,7 +76,19 @@ class Relationship(models.Model):
            What is the expected makeup of this string?
         '''
 
+        # Call default save to create the entry
         super().save(*args, **kwargs)
+
+        # Find any `Items` in the input `relationship_str`
+        m = re.match(r'^\((\w+)\).+\((\w+)\)$', self.relationship_str) # pylint: disable=invalid-name
+
+        # If we find some, get or create `Item` entries
+        if m:
+            item_1, _ = Item.objects.get_or_create(name=m.group(1))
+            item_2, _ = Item.objects.get_or_create(name=m.group(2))
+
+            # Add these `Item` entries to the `ManyToMany` field
+            self.item.add(item_1, item_2)
 
     def __str__(self):
         '''
