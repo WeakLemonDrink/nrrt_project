@@ -106,11 +106,6 @@ class Attribute(models.Model):
     name = models.CharField(max_length=140, unique=True) # Is this unique?
     dtype = models.ForeignKey(DataType, on_delete=models.CASCADE)
 
-    def serialize(self):
-        '''
-        Returns a entry serialized to json format (e.g. when constructing the returned data)
-        '''
-
     def __str__(self):
         '''
         Defines the return string for an `Attribute` db table entry
@@ -138,11 +133,6 @@ class Measure(models.Model):
     measurement_reference_time = models.CharField(max_length=140)
     measurement_precision = models.CharField(max_length=140)
 
-    def serialize(self):
-        '''
-        Returns a entry serialized to json format (e.g. when constructing the returned data)
-        '''
-
     def __str__(self):
         '''
         Defines the return string for an `Measure` db table entry
@@ -165,11 +155,6 @@ class AMLink(models.Model):
     values = models.CharField(max_length=140) # Could also be a json field if this is dictionary
                                               # like
 
-    def serialize(self):
-        '''
-        Returns a entry serialized to json format (e.g. when constructing the returned data)
-        '''
-
 
 class AbstractModel(models.Model):
     '''
@@ -180,30 +165,6 @@ class AbstractModel(models.Model):
     attribute = models.ManyToManyField(Attribute)
     measure = models.ManyToManyField(Measure)
     link = models.ManyToManyField(AMLink)
-
-    def serialize(self):
-        '''
-        Returns a entry serialized to json format (e.g. when constructing the returned data),
-        using methods defined in related entries
-        '''
-
-        return_data = {
-            'ABM_ID': self.id,
-            'ATTR': [],
-            'MEAS': [],
-            'LINK': []
-        }
-
-        for attribute in self.attribute.all():
-            return_data['ATTR'].append(attribute.serialize())
-
-        for measure in self.measure.all():
-            return_data['MEAS'].append(measure.serialize())
-
-        for link in self.link.all():
-            return_data['LINK'].append(link.serialize())
-
-        return return_data
 
 
 # See `AMLink` above
