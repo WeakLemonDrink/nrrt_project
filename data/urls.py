@@ -15,6 +15,9 @@ app_name = 'data'
 router = DefaultRouter()
 
 router.register(r'abstractmodel', views.AbstractModelViewSet)
+router.register(r'amlink', views.AMLinkViewSet)
+router.register(r'attribute', views.AttributeViewSet)
+router.register(r'measure', views.MeasureViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
