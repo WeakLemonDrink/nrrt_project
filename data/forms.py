@@ -9,6 +9,8 @@ import os
 from django import forms
 from django.conf import settings
 
+from data import models
+
 
 class UploadCsvFileForm(forms.Form):
     '''
@@ -38,6 +40,35 @@ class UploadCsvFileForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         self.upload_file_path = self.save_temporary_file()
+
+    def clean(self):
+        '''
+        Override form clean to check that:
+         * incoming `abm_match_json` json data references valid `AbstractModel` entries
+         * incoming `abm_match_json` json data references valid column names in the uploaded csv
+           file
+        '''
+
+        cleaned_data = super().clean()
+
+        referenced_ids = cleaned_data.get('abm_match_data', None)
+        upload_file = cleaned_data.get('upload_file', None)
+
+        # Only do this if we haven't already raised errors!
+        if referenced_ids:
+            # Check that the referenced `AbstractModel` ids actually exist
+            if not all([models.AbstractModel.objects.filter(id=e).exists() for e in referenced_ids.values()]): # pylint: disable=line-too-long
+                self.add_error(
+                    'abm_match_data',
+                    'Data contains references to AbstractModel entries that do not exist.'
+                )
+
+        if upload_file:
+            # Check the column names in the uploaded csv file
+            pass
+
+        return cleaned_data
+
 
     def clean_abm_match_json(self):
         '''
