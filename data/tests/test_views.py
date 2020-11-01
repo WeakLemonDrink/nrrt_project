@@ -79,3 +79,35 @@ class AbstractModelViewSetTests(TestCase):
 
         # Confirm the response is 201 (created)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+class UploadCsvFileViewTests(TestCase):
+    '''
+    TestCase class for the `UploadCsvFileView` view
+    '''
+
+    def setUp(self):
+        '''
+        Common setup for each test definition
+        '''
+
+        self.request_url = reverse('data:upload-csv')
+
+    def test_view_get_method_returns_ok(self):
+        '''
+        `UploadCsvFileView` view should return a input view following a `get` request
+
+        Response should return 200
+        '''
+
+        response = self.client.get(self.request_url)
+
+        # Confirm the response is 200 (OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_view_post_upload_file_should_be_csv(self):
+        '''
+        `UploadCsvFileView` view should return a input view following a `get` request
+
+        Response should return 200
+        '''

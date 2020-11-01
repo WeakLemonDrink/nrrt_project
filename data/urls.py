@@ -20,5 +20,6 @@ router.register(r'attribute', views.AttributeViewSet)
 router.register(r'measure', views.MeasureViewSet)
 
 urlpatterns = [
+	path('upload-csv', views.UploadCsvFileView.as_view(), name='upload-csv'),
     path('', include(router.urls)),
 ]
