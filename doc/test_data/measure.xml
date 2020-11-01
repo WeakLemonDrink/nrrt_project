@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object model="data.measure" pk="1">
+        <field name="name" type="CharField">pages</field>
+        <field name="measure_type" type="CharField">count</field>
+        <field name="unit_of_measurement" type="CharField">Page</field>
+        <field name="value_dtype" rel="ManyToOneRel" to="data.datatype">2</field>
+        <field name="statistic_type" type="CharField">observation (default)</field>
+        <field name="measurement_reference_time" type="CharField">__self__</field>
+        <field name="measurement_precision" type="CharField">±(default=NULL)</field>
+    </object>
+    <object model="data.measure" pk="2">
+        <field name="name" type="CharField">published_date</field>
+        <field name="measure_type" type="CharField">time</field>
+        <field name="unit_of_measurement" type="CharField">TIMESTAMP</field>
+        <field name="value_dtype" rel="ManyToOneRel" to="data.datatype">3</field>
+        <field name="statistic_type" type="CharField">observation (default)</field>
+        <field name="measurement_reference_time" type="CharField">__self__</field>
+        <field name="measurement_precision" type="CharField">±(default=NULL)</field>
+    </object>
+</django-objects>

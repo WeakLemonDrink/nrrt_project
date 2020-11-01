@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object model="data.attribute" pk="1">
+        <field name="name" type="CharField">title</field>
+        <field name="dtype" rel="ManyToOneRel" to="data.datatype">1</field>
+    </object>
+    <object model="data.attribute" pk="2">
+        <field name="name" type="CharField">category</field>
+        <field name="dtype" rel="ManyToOneRel" to="data.datatype">1</field>
+    </object>
+</django-objects>

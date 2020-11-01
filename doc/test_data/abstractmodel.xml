@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object model="data.abstractmodel" pk="1">
+        <field name="master_item" rel="ManyToOneRel" to="data.item">1</field>
+        <field name="attribute" rel="ManyToManyRel" to="data.attribute"><object pk="1"></object><object pk="2"></object></field>
+        <field name="measure" rel="ManyToManyRel" to="data.measure"><object pk="1"></object><object pk="2"></object></field>
+        <field name="link" rel="ManyToManyRel" to="data.amlink"><object pk="1"></object><object pk="2"></object></field>
+    </object>
+</django-objects>

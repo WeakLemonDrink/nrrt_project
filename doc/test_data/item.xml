@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object model="data.item" pk="1">
+        <field name="name" type="CharField">Book</field>
+    </object>
+    <object model="data.item" pk="2">
+        <field name="name" type="CharField">Person</field>
+    </object>
+    <object model="data.item" pk="3">
+        <field name="name" type="CharField">Review</field>
+    </object>
+</django-objects>

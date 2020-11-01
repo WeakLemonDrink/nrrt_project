@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object model="data.relationship" pk="1">
+        <field name="relationship_str" type="CharField">(Book)&lt;-[WROTE]-(Person)</field>
+        <field name="item" rel="ManyToManyRel" to="data.item"><object pk="1"></object><object pk="2"></object></field>
+    </object>
+    <object model="data.relationship" pk="2">
+        <field name="relationship_str" type="CharField">(Book)&lt;-[ABOUT]-(Review)</field>
+        <field name="item" rel="ManyToManyRel" to="data.item"><object pk="1"></object><object pk="3"></object></field>
+    </object>
+</django-objects>

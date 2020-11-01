@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object model="data.amlink" pk="1">
+        <field name="relationship" rel="ManyToOneRel" to="data.relationship">1</field>
+        <field name="instances_value_dtype" type="CharField">ABM/Person/1</field>
+        <field name="time_link" type="BooleanField">False</field>
+        <field name="link_criteria" type="CharField">best_rated</field>
+        <field name="values" type="CharField">{"Person": {"name": "__input__"}}</field>
+    </object>
+    <object model="data.amlink" pk="2">
+        <field name="relationship" rel="ManyToOneRel" to="data.relationship">2</field>
+        <field name="instances_value_dtype" type="CharField">ABM/Review/1</field>
+        <field name="time_link" type="BooleanField">False</field>
+        <field name="link_criteria" type="CharField">direct</field>
+        <field name="values" type="CharField">{"Review": {"title": "__input__", "score": "__input__"}}</field>
+    </object>
+</django-objects>

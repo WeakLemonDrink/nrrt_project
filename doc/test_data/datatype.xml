@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object model="data.datatype" pk="1">
+        <field name="name" type="CharField">VARCHAR</field>
+    </object>
+    <object model="data.datatype" pk="2">
+        <field name="name" type="CharField">INT</field>
+    </object>
+    <object model="data.datatype" pk="3">
+        <field name="name" type="CharField">TIMESTAMP</field>
+    </object>
+</django-objects>
