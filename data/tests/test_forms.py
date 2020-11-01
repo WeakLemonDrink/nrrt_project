@@ -16,6 +16,16 @@ class UploadCsvFileFormTests(TestCase):
     TestCase class for the `UploadCsvFileForm` form
     '''
 
+    fixtures = [
+        './doc/test_data/datatype.xml',
+        './doc/test_data/item.xml',
+        './doc/test_data/relationship.xml',
+        './doc/test_data/attribute.xml',
+        './doc/test_data/measure.xml',
+        './doc/test_data/amlink.xml',
+        './doc/test_data/abstractmodel.xml',
+    ]
+
     def setUp(self):
         '''
         Common setup for use across the test methods
@@ -26,6 +36,8 @@ class UploadCsvFileFormTests(TestCase):
 
         # Create some empty file to test raising errors
         self.empty_csv_file = {'upload_file': SimpleUploadedFile('instances.csv', bytes(2))}
+
+
 
     def test_form_init_saves_upload_file_to_tmp(self):
         '''
