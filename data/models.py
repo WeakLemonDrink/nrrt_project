@@ -177,11 +177,6 @@ class InstanceLink(models.Model):
     landing_instance = models.CharField(max_length=140) # Could be a `models.UrlField` if this is
                                                         # always a url
 
-    def serialize(self):
-        '''
-        Returns a entry serialized to json format (e.g. when constructing the returned data)
-        '''
-
 
 # Need a bit more information on what a `Link` and a `IncomingInteractionLink` are
 class IncomingInteractionLink(models.Model):
@@ -192,11 +187,6 @@ class IncomingInteractionLink(models.Model):
     relationship = models.CharField(max_length=140)
     origin_instance = models.CharField(max_length=140) # Could be a `models.UrlField` if this is
                                                        # always a url
-
-    def serialize(self):
-        '''
-        Returns a entry serialized to json format (e.g. when constructing the returned data)
-        '''
 
     def __str__(self):
         '''
@@ -216,28 +206,6 @@ class Instance(models.Model):
     measure = models.CharField(max_length=140)
     link = models.ManyToManyField(InstanceLink) # e.g. (Book)<-[WROTE]-(Person)
     iil = models.ManyToManyField(IncomingInteractionLink)
-
-    def serialize(self):
-        '''
-        Returns a entry serialized to json format (e.g. when constructing the returned data),
-        using methods defined in related entries
-        '''
-
-        return_data = {
-            'ABM': str(self.abm),
-            'ATTR': self.attribute,
-            'MEAS': self.measure,
-            'LINK': [],
-            'IIL': []
-        }
-
-        for link in self.link.all():
-            return_data['LINK'].append(link.serialize())
-
-        for iil in self.iil.all():
-            return_data['IIL'].append(iil.serialize())
-
-        return return_data
 
 
 class RankingCluster(models.Model):

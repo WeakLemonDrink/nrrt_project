@@ -119,6 +119,31 @@ class UploadCsvFileForm(forms.Form):
 
         return self.cleaned_data.get('upload_file')
 
+    def save(self):
+        '''
+        Method creates new `Instance` entries from the `upload_file` csv if all input data has
+        been validated
+        '''
+
+        created_entries = []
+
+        with open(self.upload_file_path, 'r') as csv_file:
+            reader = csv.DictReader(csv_file)
+
+            for row in reader:
+                # Loop through each key in the `abm_match_dict` and get_or_create instances based
+                # on the `AbstractModel` referenced
+                for column_name, abm_id in self.abm_match_dict.items():
+                    entry, created = models.Instance.objects.get_or_create(
+                        abm=models.AbstractModel.objects.get(id=abm_id),
+                        attribute=json.dumps({column_name: row[column_name]})
+                    )
+
+                    if created:
+                        # If a new entry has been created, add it to the list
+                        created_entries += [entry]
+
+        return created_entries
 
     def save_temporary_file(self):
         '''

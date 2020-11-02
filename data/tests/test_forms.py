@@ -3,29 +3,20 @@ Tests for `data.models` in the `data` Django web app
 '''
 
 
+import json
 import os
 
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 
-from data import forms
+from data import forms, models
 
 
 class UploadCsvFileFormTests(TestCase):
     '''
     TestCase class for the `UploadCsvFileForm` form
     '''
-
-    fixtures = [
-        './doc/test_data/datatype.xml',
-        './doc/test_data/item.xml',
-        './doc/test_data/relationship.xml',
-        './doc/test_data/attribute.xml',
-        './doc/test_data/measure.xml',
-        './doc/test_data/amlink.xml',
-        './doc/test_data/abstractmodel.xml',
-    ]
 
     def setUp(self):
         '''
@@ -147,6 +138,11 @@ class UploadCsvFileFormTests(TestCase):
         error attached to the `upload_file` field
         '''
 
+        # Create an `AbstractModel` entry in the db to use as an id
+        abm = models.AbstractModel.objects.create(
+            master_item=models.Item.objects.create(name='blah')
+        )
+
         # Open the test file and attach it as an uploaded file
         upload_file = open(
             os.path.join(settings.BASE_DIR, 'doc', 'test_data', 'column_name_error.csv'),
@@ -155,7 +151,7 @@ class UploadCsvFileFormTests(TestCase):
 
         # Instantiate the form
         form = forms.UploadCsvFileForm(
-            {'abm_match_json': '{"Blah": "1"}'},
+            {'abm_match_json': json.dumps({'Blah': abm.id})},
             {'upload_file': SimpleUploadedFile(upload_file.name, upload_file.read())}
         )
 
@@ -167,3 +163,108 @@ class UploadCsvFileFormTests(TestCase):
             form.errors['upload_file'],
             ['Column name "Blah" does not exist in "column_name_error.csv".']
         )
+
+    def test_form_is_valid_true(self):
+        '''
+        `UploadCsvFileForm` `.is_valid()` method should return `true` if all the input data is
+        right.
+        '''
+
+        # Create an `AbstractModel` entry in the db to use as an id
+        abm = models.AbstractModel.objects.create(
+            master_item=models.Item.objects.create(name='blah')
+        )
+
+        # Open the test file and attach it as an uploaded file
+        upload_file = open(
+            os.path.join(settings.BASE_DIR, 'doc', 'test_data', 'column_name_blah.csv'),
+            'rb'
+        )
+
+        # Instantiate the form
+        form = forms.UploadCsvFileForm(
+            {'abm_match_json': json.dumps({'Blah': abm.id})},
+            {'upload_file': SimpleUploadedFile(upload_file.name, upload_file.read())}
+        )
+
+        # Input csv has a column named "Blah" so form should validate this data as
+        # `is_valid` == `True`
+        self.assertTrue(form.is_valid())
+
+    def test_form_save_creates_instances_is_valid_true(self):
+        '''
+        `UploadCsvFileForm` `.save()` method should create new `Instance` entries and return them
+        if all the input data is right.
+
+        Input data should return `is_valid()` == `True`
+        '''
+
+        # Create some valid `AbstractModel` entries
+        award = models.AbstractModel.objects.create(
+            master_item=models.Item.objects.create(name='award')
+        )
+        person = models.AbstractModel.objects.create(
+            master_item=models.Item.objects.create(name='person')
+        )
+        film = models.AbstractModel.objects.create(
+            master_item=models.Item.objects.create(name='film')
+        )
+
+        # Open the test file and attach it as an uploaded file
+        upload_file = open(
+            os.path.join(settings.BASE_DIR, 'doc', 'test_data', 'oscar_winners.csv'),
+            'rb'
+        )
+
+        # Instantiate the form
+        form = forms.UploadCsvFileForm(
+            {'abm_match_json': json.dumps(
+                {'Year': award.id, 'Age': person.id, 'Name': person.id, 'Movie': film.id}
+            )},
+            {'upload_file': SimpleUploadedFile(upload_file.name, upload_file.read())}
+        )
+
+        # Input csv has a column named "Blah" so form should validate this data as
+        # `is_valid` == `True`
+        self.assertTrue(form.is_valid())
+
+    def test_form_save_creates_instances(self):
+        '''
+        `UploadCsvFileForm` `.save()` method should create new `Instance` entries and return them
+        if all the input data is right.
+
+        Data contained within `oscar_winners.csv` should be saved to new `Instance` entries with
+        relationships to valid `AbstractModel` entries
+        '''
+
+        # Create some valid `AbstractModel` entries
+        award = models.AbstractModel.objects.create(
+            master_item=models.Item.objects.create(name='award')
+        )
+        person = models.AbstractModel.objects.create(
+            master_item=models.Item.objects.create(name='person')
+        )
+        film = models.AbstractModel.objects.create(
+            master_item=models.Item.objects.create(name='film')
+        )
+
+        # Open the test file and attach it as an uploaded file
+        upload_file = open(
+            os.path.join(settings.BASE_DIR, 'doc', 'test_data', 'oscar_winners.csv'),
+            'rb'
+        )
+
+        # Instantiate the form
+        form = forms.UploadCsvFileForm(
+            {'abm_match_json': json.dumps(
+                {'Year': award.id, 'Age': person.id, 'Name': person.id, 'Movie': film.id}
+            )},
+            {'upload_file': SimpleUploadedFile(upload_file.name, upload_file.read())}
+        )
+
+        # Call `is_valid()` first then `save()`
+        form.is_valid()
+        form.save()
+
+        # Confirm 8 `Instance` entries have been created
+        self.assertEqual(models.Instance.objects.all().count(), 8)
