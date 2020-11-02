@@ -3,7 +3,10 @@ Defines all views for the `data` django app
 '''
 
 
+from django.contrib import messages
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 from django.views.generic.base import ContextMixin, View
 
 from rest_framework import viewsets
@@ -73,38 +76,36 @@ class UploadCsvFileView(ContextMixin, View):
 
         return render(request, self.template_name, context)
 
-    # def post(self, request, *args, **kwargs):
-    #     '''
-    #     Handles post data and returns a created `ContractNotice` or `ContractAwardNotice` data
-    #     when successful
-    #     '''
+    def post(self, request):
+        '''
+        Handles post data and returns any created `Instance` entries
+        when successful
+        '''
 
-    #     form = self.form_class(request.POST, request.FILES)
+        form = self.form_class(request.POST, request.FILES)
 
-    #     # If data entered is valid, call `form.save()` to create new entries
-    #     if form.is_valid():
+        # If data entered is valid, call `form.save()` to create new entries
+        if form.is_valid():
 
-    #         new_entry = form.save()
+            new_entries = form.save()
 
-    #         # Create the success message
-    #         messages.add_message(
-    #             request,
-    #             messages.SUCCESS,
-    #             '{} {} was added to the database successfully.'.format(
-    #                 new_entry._meta.verbose_name, new_entry
-    #             )
-    #         )
+            # Create the success message
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                '{!s} new Instance entries added to the database successfully.'.format(
+                    len(new_entries)
+                )
+            )
 
-    #         # Redirect to a view showing success
-    #         response = HttpResponseRedirect(
-    #             reverse('tenders:{}-list'.format(new_entry._meta.model_name))
-    #         )
+            # Redirect to a view showing success
+            response = HttpResponseRedirect(reverse('data:upload-csv'))
 
-    #     else:
-    #         # If not valid, return the form with associated errors
-    #         # Build context ready to pass to render
-    #         context = self.get_context_data(form=form)
+        else:
+            # If not valid, return the form with associated errors
+            # Build context ready to pass to render
+            context = self.get_context_data(form=form)
 
-    #         response = render(request, self.template_name, context)
+            response = render(request, self.template_name, context)
 
-    #     return response
+        return response
