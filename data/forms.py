@@ -3,6 +3,7 @@ Defines forms for the `data` django app
 '''
 
 
+import csv
 import json
 import os
 
@@ -39,50 +40,67 @@ class UploadCsvFileForm(forms.Form):
         # Default init
         super().__init__(*args, **kwargs)
 
+        self.abm_match_dict = None
         self.upload_file_path = self.save_temporary_file()
+        self.upload_file_name = os.path.basename(self.upload_file_path)
 
     def clean(self):
         '''
-        Override form clean to check that:
-         * incoming `abm_match_json` json data references valid `AbstractModel` entries
-         * incoming `abm_match_json` json data references valid column names in the uploaded csv
-           file
+        Override form clean to check that incoming `abm_match_json` json data references valid
+        column names in the uploaded csv file
         '''
+
+        column_names = None
+        column_name_errors = []
 
         cleaned_data = super().clean()
 
-        referenced_ids = cleaned_data.get('abm_match_data', None)
-        upload_file = cleaned_data.get('upload_file', None)
+        if self.abm_match_dict:
+            # If we have a valid dictionary of `AbtractModel` entries, open the csv and check the
+            # keys are present as column names
+            with open(self.upload_file_path, 'r') as csv_file:
+                reader = csv.DictReader(csv_file)
+                column_names = reader.fieldnames
 
-        # Only do this if we haven't already raised errors!
-        if referenced_ids:
-            # Check that the referenced `AbstractModel` ids actually exist
-            if not all([models.AbstractModel.objects.filter(id=e).exists() for e in referenced_ids.values()]): # pylint: disable=line-too-long
-                self.add_error(
-                    'abm_match_data',
-                    'Data contains references to AbstractModel entries that do not exist.'
-                )
+            # Loop through the `abm_match_dict` and check if column names exist
+            for key in self.abm_match_dict.keys():
+                if not key in column_names:
+                    column_name_errors += ['Column name "' + key + '" does not exist in "' +
+                                           self.upload_file_name + '".']
 
-        if upload_file:
-            # Check the column names in the uploaded csv file
-            pass
+            # If we've produced any errors, add them to the `upload_file` field
+            if column_name_errors:
+                self.add_error('upload_file', column_name_errors)
 
         return cleaned_data
 
-
     def clean_abm_match_json(self):
         '''
-        Override field clean to check the abm_match_json is actually json
+        Override field clean to check the input abm_match_json:
+         * is actually json
+         * references valid `AbstractModel` entries
         '''
 
         abm_match_json = self.cleaned_data['abm_match_json']
 
+        # Check the input data is actually json
         try:
-            _ = json.loads(self.cleaned_data['abm_match_json'])
+            self.abm_match_dict = json.loads(abm_match_json)
 
         except json.JSONDecodeError as err:
             # If input data is not json, raise error
-            self.add_error('abm_match_json', err)
+            self.add_error('abm_match_json', [err])
+
+        # Now check if the data contains valid `AbstractModel` entries
+        if self.abm_match_dict:
+            # Check that the referenced `AbstractModel` ids actually exist
+            if not all([models.AbstractModel.objects.filter(id=e).exists() for e in self.abm_match_dict.values()]): # pylint: disable=line-too-long
+                self.add_error(
+                    'abm_match_json',
+                    'Data contains references to AbstractModel entries that do not exist.'
+                )
+                # Clear the `abm_match_dict` as the data is invalid
+                self.abm_match_dict = None
 
         return abm_match_json
 
@@ -92,11 +110,11 @@ class UploadCsvFileForm(forms.Form):
         Override field clean to check the uploaded file is a valid csv file
         '''
 
-        if not os.path.splitext(self.upload_file_path)[1] == '.csv':
+        if not os.path.splitext(self.upload_file_name)[1] == '.csv':
             # If extension is not csv, raise error
             self.add_error(
                 'upload_file',
-                '"' + os.path.basename(self.upload_file_path) + '" is not a valid csv.'
+                '"' + self.upload_file_name + '" is not a valid csv.'
             )
 
         return self.cleaned_data.get('upload_file')

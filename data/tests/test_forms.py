@@ -5,6 +5,7 @@ Tests for `data.models` in the `data` Django web app
 
 import os
 
+from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 
@@ -36,8 +37,6 @@ class UploadCsvFileFormTests(TestCase):
 
         # Create some empty file to test raising errors
         self.empty_csv_file = {'upload_file': SimpleUploadedFile('instances.csv', bytes(2))}
-
-
 
     def test_form_init_saves_upload_file_to_tmp(self):
         '''
@@ -111,4 +110,60 @@ class UploadCsvFileFormTests(TestCase):
 
         self.assertEqual(
             form.errors['abm_match_json'], ['Expecting value: line 1 column 1 (char 0)']
+        )
+
+    def test_form_raises_error_abm_match_data_no_abm_entry(self):
+        '''
+        `UploadCsvFileForm` `.is_valid()` method should raise an error if the abm match data is
+        invalid. `abm_match` data should be in the form e.g.:
+
+         {'Year': '1', 'Age': '2', 'Name': '2', 'Movie': '3'}
+
+        If the data references `AbstractModel` ids that do not exist, an error should be raised
+        '''
+
+        # Instantiate the form
+        form = forms.UploadCsvFileForm(
+            {'abm_match_json': '{"Year": "1", "Age": "2", "Name": "2", "Movie": "3"}'},
+            self.empty_csv_file
+        )
+
+        # Confirm calling the `.is_valid()` method raises the correct error
+        form.is_valid()
+
+        # Data loaded by fixtures should contain a single `AbstractModel` entry only with id=1, so
+        # the additional references to ids should raise an error
+        self.assertEqual(
+            form.errors['abm_match_json'],
+            ['Data contains references to AbstractModel entries that do not exist.']
+        )
+
+    def test_form_raises_error_abm_match_data_csv_column_name_not_found(self):
+        '''
+        `UploadCsvFileForm` `.is_valid()` method should raise an error if the key strings in the
+        `abm_match_json` don't agree with the column names in the input csv.
+
+        If the input csv does not have a column name that is a key in the `abm_match_json`, raise
+        error attached to the `upload_file` field
+        '''
+
+        # Open the test file and attach it as an uploaded file
+        upload_file = open(
+            os.path.join(settings.BASE_DIR, 'doc', 'test_data', 'column_name_error.csv'),
+            'rb'
+        )
+
+        # Instantiate the form
+        form = forms.UploadCsvFileForm(
+            {'abm_match_json': '{"Blah": "1"}'},
+            {'upload_file': SimpleUploadedFile(upload_file.name, upload_file.read())}
+        )
+
+        # Confirm calling the `.is_valid()` method raises the correct error
+        form.is_valid()
+
+        # Uploaded csv does not have a column in it called "blah", so should raise an error
+        self.assertEqual(
+            form.errors['upload_file'],
+            ['Column name "Blah" does not exist in "column_name_error.csv".']
         )
