@@ -42,7 +42,6 @@ class UploadCsvFileForm(forms.Form):
 
         self.abm_match_dict = None
         self.upload_file_path = self.save_temporary_file()
-        self.upload_file_name = os.path.basename(self.upload_file_path)
 
     def clean(self):
         '''
@@ -66,7 +65,7 @@ class UploadCsvFileForm(forms.Form):
             for key in self.abm_match_dict.keys():
                 if not key in column_names:
                     column_name_errors += ['Column name "' + key + '" does not exist in "' +
-                                           self.upload_file_name + '".']
+                                           os.path.basename(self.upload_file_path) + '".']
 
             # If we've produced any errors, add them to the `upload_file` field
             if column_name_errors:
@@ -110,11 +109,11 @@ class UploadCsvFileForm(forms.Form):
         Override field clean to check the uploaded file is a valid csv file
         '''
 
-        if not os.path.splitext(self.upload_file_name)[1] == '.csv':
+        if not os.path.splitext(os.path.basename(self.upload_file_path))[1] == '.csv':
             # If extension is not csv, raise error
             self.add_error(
                 'upload_file',
-                '"' + self.upload_file_name + '" is not a valid csv.'
+                '"' + os.path.basename(self.upload_file_path) + '" is not a valid csv.'
             )
 
         return self.cleaned_data.get('upload_file')
@@ -125,25 +124,39 @@ class UploadCsvFileForm(forms.Form):
         been validated
         '''
 
-        created_entries = []
+        abm_ids = {}
+        new_entries = []
 
+        # First unpack the `abm_match_dict` and group column names by abm_id
+        for key, value in self.abm_match_dict.items():
+            # If a referenced `AbstractModel` id already exists, append the column name
+            if abm_ids.get(value, None):
+                abm_ids[value] =  abm_ids[value] + [key]
+            else:
+                abm_ids[value] = [key]
+
+        # Now open the csv and create `Instance` entries based on row data
         with open(self.upload_file_path, 'r') as csv_file:
             reader = csv.DictReader(csv_file)
 
             for row in reader:
-                # Loop through each key in the `abm_match_dict` and get_or_create instances based
-                # on the `AbstractModel` referenced
-                for column_name, abm_id in self.abm_match_dict.items():
-                    entry, created = models.Instance.objects.get_or_create(
+                # Loop through each abm_id in abm_ids and create instances based on the
+                # `AbstractModel` referenced
+                for abm_id, column_names in abm_ids.items():
+                    attribute_data = {}
+
+                    for col_name in column_names:
+                        attribute_data[col_name] = row[col_name]
+
+                    entry = models.Instance.objects.create(
                         abm=models.AbstractModel.objects.get(id=abm_id),
-                        attribute=json.dumps({column_name: row[column_name]})
+                        attribute=json.dumps(attribute_data)
                     )
 
-                    if created:
-                        # If a new entry has been created, add it to the list
-                        created_entries += [entry]
+                    # Add new entry to the list
+                    new_entries += [entry]
 
-        return created_entries
+        return new_entries
 
     def save_temporary_file(self):
         '''

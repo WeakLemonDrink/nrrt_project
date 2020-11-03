@@ -235,6 +235,8 @@ class UploadCsvFileFormTests(TestCase):
 
         Data contained within `oscar_winners.csv` should be saved to new `Instance` entries with
         relationships to valid `AbstractModel` entries
+
+        6 entries should be created from this data
         '''
 
         # Create some valid `AbstractModel` entries
@@ -266,5 +268,5 @@ class UploadCsvFileFormTests(TestCase):
         form.is_valid()
         form.save()
 
-        # Confirm 8 `Instance` entries have been created
-        self.assertEqual(models.Instance.objects.all().count(), 8)
+        # Confirm 6 `Instance` entries have been created
+        self.assertEqual(models.Instance.objects.all().count(), 6)
