@@ -14,12 +14,13 @@ app_name = 'data'
 # Register drf views
 router = DefaultRouter()
 
-router.register(r'abstractmodel', views.AbstractModelViewSet)
-router.register(r'amlink', views.AMLinkViewSet)
-router.register(r'attribute', views.AttributeViewSet)
-router.register(r'measure', views.MeasureViewSet)
+router.register('abstractmodel', views.AbstractModelViewSet)
+router.register('amlink', views.AMLinkViewSet)
+router.register('attribute', views.AttributeViewSet)
+router.register('instance', views.InstanceViewSet)
+router.register('measure', views.MeasureViewSet)
 
 urlpatterns = [
-	path('upload-csv', views.UploadCsvFileView.as_view(), name='upload-csv'),
+	path('upload-csv/', views.UploadCsvFileView.as_view(), name='upload-csv'),
     path('', include(router.urls)),
 ]

@@ -47,6 +47,17 @@ class AttributeViewSet(viewsets.ModelViewSet): # pylint: disable=too-many-ancest
     serializer_class = serializers.AttributeSerializer
 
 
+class InstanceViewSet(viewsets.ModelViewSet): # pylint: disable=too-many-ancestors
+    '''
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update` and `destroy` actions for `Instance` entries
+    '''
+
+    model = models.Instance
+    queryset = models.Instance.objects.all()
+    serializer_class = serializers.InstanceSerializer
+
+
 class MeasureViewSet(viewsets.ModelViewSet): # pylint: disable=too-many-ancestors
     '''
     This viewset automatically provides `list`, `create`, `retrieve`,
