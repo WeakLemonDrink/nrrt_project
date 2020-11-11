@@ -103,7 +103,6 @@ class UploadCsvFileForm(forms.Form):
 
         return abm_match_json
 
-
     def clean_upload_file(self):
         '''
         Override field clean to check the uploaded file is a valid csv file
