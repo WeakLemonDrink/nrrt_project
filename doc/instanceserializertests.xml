@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object model="auth.permission" pk="1">
+        <field name="name" type="CharField">Can add permission</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">1</field>
+        <field name="codename" type="CharField">add_permission</field>
+    </object>
+    <object model="auth.permission" pk="2">
+        <field name="name" type="CharField">Can change permission</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">1</field>
+        <field name="codename" type="CharField">change_permission</field>
+    </object>
+    <object model="auth.permission" pk="3">
+        <field name="name" type="CharField">Can delete permission</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">1</field>
+        <field name="codename" type="CharField">delete_permission</field>
+    </object>
+    <object model="auth.permission" pk="4">
+        <field name="name" type="CharField">Can view permission</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">1</field>
+        <field name="codename" type="CharField">view_permission</field>
+    </object>
+    <object model="auth.permission" pk="5">
+        <field name="name" type="CharField">Can add group</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">2</field>
+        <field name="codename" type="CharField">add_group</field>
+    </object>
+    <object model="auth.permission" pk="6">
+        <field name="name" type="CharField">Can change group</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">2</field>
+        <field name="codename" type="CharField">change_group</field>
+    </object>
+    <object model="auth.permission" pk="7">
+        <field name="name" type="CharField">Can delete group</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">2</field>
+        <field name="codename" type="CharField">delete_group</field>
+    </object>
+    <object model="auth.permission" pk="8">
+        <field name="name" type="CharField">Can view group</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">2</field>
+        <field name="codename" type="CharField">view_group</field>
+    </object>
+    <object model="auth.permission" pk="9">
+        <field name="name" type="CharField">Can add user</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">3</field>
+        <field name="codename" type="CharField">add_user</field>
+    </object>
+    <object model="auth.permission" pk="10">
+        <field name="name" type="CharField">Can change user</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">3</field>
+        <field name="codename" type="CharField">change_user</field>
+    </object>
+    <object model="auth.permission" pk="11">
+        <field name="name" type="CharField">Can delete user</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">3</field>
+        <field name="codename" type="CharField">delete_user</field>
+    </object>
+    <object model="auth.permission" pk="12">
+        <field name="name" type="CharField">Can view user</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">3</field>
+        <field name="codename" type="CharField">view_user</field>
+    </object>
+    <object model="auth.permission" pk="13">
+        <field name="name" type="CharField">Can add content type</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">4</field>
+        <field name="codename" type="CharField">add_contenttype</field>
+    </object>
+    <object model="auth.permission" pk="14">
+        <field name="name" type="CharField">Can change content type</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">4</field>
+        <field name="codename" type="CharField">change_contenttype</field>
+    </object>
+    <object model="auth.permission" pk="15">
+        <field name="name" type="CharField">Can delete content type</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">4</field>
+        <field name="codename" type="CharField">delete_contenttype</field>
+    </object>
+    <object model="auth.permission" pk="16">
+        <field name="name" type="CharField">Can view content type</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">4</field>
+        <field name="codename" type="CharField">view_contenttype</field>
+    </object>
+    <object model="auth.permission" pk="17">
+        <field name="name" type="CharField">Can add session</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">5</field>
+        <field name="codename" type="CharField">add_session</field>
+    </object>
+    <object model="auth.permission" pk="18">
+        <field name="name" type="CharField">Can change session</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">5</field>
+        <field name="codename" type="CharField">change_session</field>
+    </object>
+    <object model="auth.permission" pk="19">
+        <field name="name" type="CharField">Can delete session</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">5</field>
+        <field name="codename" type="CharField">delete_session</field>
+    </object>
+    <object model="auth.permission" pk="20">
+        <field name="name" type="CharField">Can view session</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">5</field>
+        <field name="codename" type="CharField">view_session</field>
+    </object>
+    <object model="auth.permission" pk="21">
+        <field name="name" type="CharField">Can add abstract model</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">6</field>
+        <field name="codename" type="CharField">add_abstractmodel</field>
+    </object>
+    <object model="auth.permission" pk="22">
+        <field name="name" type="CharField">Can change abstract model</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">6</field>
+        <field name="codename" type="CharField">change_abstractmodel</field>
+    </object>
+    <object model="auth.permission" pk="23">
+        <field name="name" type="CharField">Can delete abstract model</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">6</field>
+        <field name="codename" type="CharField">delete_abstractmodel</field>
+    </object>
+    <object model="auth.permission" pk="24">
+        <field name="name" type="CharField">Can view abstract model</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">6</field>
+        <field name="codename" type="CharField">view_abstractmodel</field>
+    </object>
+    <object model="auth.permission" pk="25">
+        <field name="name" type="CharField">Can add data type</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">7</field>
+        <field name="codename" type="CharField">add_datatype</field>
+    </object>
+    <object model="auth.permission" pk="26">
+        <field name="name" type="CharField">Can change data type</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">7</field>
+        <field name="codename" type="CharField">change_datatype</field>
+    </object>
+    <object model="auth.permission" pk="27">
+        <field name="name" type="CharField">Can delete data type</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">7</field>
+        <field name="codename" type="CharField">delete_datatype</field>
+    </object>
+    <object model="auth.permission" pk="28">
+        <field name="name" type="CharField">Can view data type</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">7</field>
+        <field name="codename" type="CharField">view_datatype</field>
+    </object>
+    <object model="auth.permission" pk="29">
+        <field name="name" type="CharField">Can add incoming interaction link</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">8</field>
+        <field name="codename" type="CharField">add_incominginteractionlink</field>
+    </object>
+    <object model="auth.permission" pk="30">
+        <field name="name" type="CharField">Can change incoming interaction link</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">8</field>
+        <field name="codename" type="CharField">change_incominginteractionlink</field>
+    </object>
+    <object model="auth.permission" pk="31">
+        <field name="name" type="CharField">Can delete incoming interaction link</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">8</field>
+        <field name="codename" type="CharField">delete_incominginteractionlink</field>
+    </object>
+    <object model="auth.permission" pk="32">
+        <field name="name" type="CharField">Can view incoming interaction link</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">8</field>
+        <field name="codename" type="CharField">view_incominginteractionlink</field>
+    </object>
+    <object model="auth.permission" pk="33">
+        <field name="name" type="CharField">Can add item</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">9</field>
+        <field name="codename" type="CharField">add_item</field>
+    </object>
+    <object model="auth.permission" pk="34">
+        <field name="name" type="CharField">Can change item</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">9</field>
+        <field name="codename" type="CharField">change_item</field>
+    </object>
+    <object model="auth.permission" pk="35">
+        <field name="name" type="CharField">Can delete item</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">9</field>
+        <field name="codename" type="CharField">delete_item</field>
+    </object>
+    <object model="auth.permission" pk="36">
+        <field name="name" type="CharField">Can view item</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">9</field>
+        <field name="codename" type="CharField">view_item</field>
+    </object>
+    <object model="auth.permission" pk="37">
+        <field name="name" type="CharField">Can add relationship</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">10</field>
+        <field name="codename" type="CharField">add_relationship</field>
+    </object>
+    <object model="auth.permission" pk="38">
+        <field name="name" type="CharField">Can change relationship</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">10</field>
+        <field name="codename" type="CharField">change_relationship</field>
+    </object>
+    <object model="auth.permission" pk="39">
+        <field name="name" type="CharField">Can delete relationship</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">10</field>
+        <field name="codename" type="CharField">delete_relationship</field>
+    </object>
+    <object model="auth.permission" pk="40">
+        <field name="name" type="CharField">Can view relationship</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">10</field>
+        <field name="codename" type="CharField">view_relationship</field>
+    </object>
+    <object model="auth.permission" pk="41">
+        <field name="name" type="CharField">Can add ranking cluster</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">11</field>
+        <field name="codename" type="CharField">add_rankingcluster</field>
+    </object>
+    <object model="auth.permission" pk="42">
+        <field name="name" type="CharField">Can change ranking cluster</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">11</field>
+        <field name="codename" type="CharField">change_rankingcluster</field>
+    </object>
+    <object model="auth.permission" pk="43">
+        <field name="name" type="CharField">Can delete ranking cluster</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">11</field>
+        <field name="codename" type="CharField">delete_rankingcluster</field>
+    </object>
+    <object model="auth.permission" pk="44">
+        <field name="name" type="CharField">Can view ranking cluster</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">11</field>
+        <field name="codename" type="CharField">view_rankingcluster</field>
+    </object>
+    <object model="auth.permission" pk="45">
+        <field name="name" type="CharField">Can add measure</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">12</field>
+        <field name="codename" type="CharField">add_measure</field>
+    </object>
+    <object model="auth.permission" pk="46">
+        <field name="name" type="CharField">Can change measure</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">12</field>
+        <field name="codename" type="CharField">change_measure</field>
+    </object>
+    <object model="auth.permission" pk="47">
+        <field name="name" type="CharField">Can delete measure</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">12</field>
+        <field name="codename" type="CharField">delete_measure</field>
+    </object>
+    <object model="auth.permission" pk="48">
+        <field name="name" type="CharField">Can view measure</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">12</field>
+        <field name="codename" type="CharField">view_measure</field>
+    </object>
+    <object model="auth.permission" pk="49">
+        <field name="name" type="CharField">Can add instance link</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">13</field>
+        <field name="codename" type="CharField">add_instancelink</field>
+    </object>
+    <object model="auth.permission" pk="50">
+        <field name="name" type="CharField">Can change instance link</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">13</field>
+        <field name="codename" type="CharField">change_instancelink</field>
+    </object>
+    <object model="auth.permission" pk="51">
+        <field name="name" type="CharField">Can delete instance link</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">13</field>
+        <field name="codename" type="CharField">delete_instancelink</field>
+    </object>
+    <object model="auth.permission" pk="52">
+        <field name="name" type="CharField">Can view instance link</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">13</field>
+        <field name="codename" type="CharField">view_instancelink</field>
+    </object>
+    <object model="auth.permission" pk="53">
+        <field name="name" type="CharField">Can add instance</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">14</field>
+        <field name="codename" type="CharField">add_instance</field>
+    </object>
+    <object model="auth.permission" pk="54">
+        <field name="name" type="CharField">Can change instance</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">14</field>
+        <field name="codename" type="CharField">change_instance</field>
+    </object>
+    <object model="auth.permission" pk="55">
+        <field name="name" type="CharField">Can delete instance</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">14</field>
+        <field name="codename" type="CharField">delete_instance</field>
+    </object>
+    <object model="auth.permission" pk="56">
+        <field name="name" type="CharField">Can view instance</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">14</field>
+        <field name="codename" type="CharField">view_instance</field>
+    </object>
+    <object model="auth.permission" pk="57">
+        <field name="name" type="CharField">Can add attribute</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">15</field>
+        <field name="codename" type="CharField">add_attribute</field>
+    </object>
+    <object model="auth.permission" pk="58">
+        <field name="name" type="CharField">Can change attribute</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">15</field>
+        <field name="codename" type="CharField">change_attribute</field>
+    </object>
+    <object model="auth.permission" pk="59">
+        <field name="name" type="CharField">Can delete attribute</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">15</field>
+        <field name="codename" type="CharField">delete_attribute</field>
+    </object>
+    <object model="auth.permission" pk="60">
+        <field name="name" type="CharField">Can view attribute</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">15</field>
+        <field name="codename" type="CharField">view_attribute</field>
+    </object>
+    <object model="auth.permission" pk="61">
+        <field name="name" type="CharField">Can add am link</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">16</field>
+        <field name="codename" type="CharField">add_amlink</field>
+    </object>
+    <object model="auth.permission" pk="62">
+        <field name="name" type="CharField">Can change am link</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">16</field>
+        <field name="codename" type="CharField">change_amlink</field>
+    </object>
+    <object model="auth.permission" pk="63">
+        <field name="name" type="CharField">Can delete am link</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">16</field>
+        <field name="codename" type="CharField">delete_amlink</field>
+    </object>
+    <object model="auth.permission" pk="64">
+        <field name="name" type="CharField">Can view am link</field>
+        <field name="content_type" rel="ManyToOneRel" to="contenttypes.contenttype">16</field>
+        <field name="codename" type="CharField">view_amlink</field>
+    </object>
+    <object model="contenttypes.contenttype" pk="1">
+        <field name="app_label" type="CharField">auth</field>
+        <field name="model" type="CharField">permission</field>
+    </object>
+    <object model="contenttypes.contenttype" pk="2">
+        <field name="app_label" type="CharField">auth</field>
+        <field name="model" type="CharField">group</field>
+    </object>
+    <object model="contenttypes.contenttype" pk="3">
+        <field name="app_label" type="CharField">auth</field>
+        <field name="model" type="CharField">user</field>
+    </object>
+    <object model="contenttypes.contenttype" pk="4">
+        <field name="app_label" type="CharField">contenttypes</field>
+        <field name="model" type="CharField">contenttype</field>
+    </object>
+    <object model="contenttypes.contenttype" pk="5">
+        <field name="app_label" type="CharField">sessions</field>
+        <field name="model" type="CharField">session</field>
+    </object>
+    <object model="contenttypes.contenttype" pk="6">
+        <field name="app_label" type="CharField">data</field>
+        <field name="model" type="CharField">abstractmodel</field>
+    </object>
+    <object model="contenttypes.contenttype" pk="7">
+        <field name="app_label" type="CharField">data</field>
+        <field name="model" type="CharField">datatype</field>
+    </object>
+    <object model="contenttypes.contenttype" pk="8">
+        <field name="app_label" type="CharField">data</field>
+        <field name="model" type="CharField">incominginteractionlink</field>
+    </object>
+    <object model="contenttypes.contenttype" pk="9">
+        <field name="app_label" type="CharField">data</field>
+        <field name="model" type="CharField">item</field>
+    </object>
+    <object model="contenttypes.contenttype" pk="10">
+        <field name="app_label" type="CharField">data</field>
+        <field name="model" type="CharField">relationship</field>
+    </object>
+    <object model="contenttypes.contenttype" pk="11">
+        <field name="app_label" type="CharField">data</field>
+        <field name="model" type="CharField">rankingcluster</field>
+    </object>
+    <object model="contenttypes.contenttype" pk="12">
+        <field name="app_label" type="CharField">data</field>
+        <field name="model" type="CharField">measure</field>
+    </object>
+    <object model="contenttypes.contenttype" pk="13">
+        <field name="app_label" type="CharField">data</field>
+        <field name="model" type="CharField">instancelink</field>
+    </object>
+    <object model="contenttypes.contenttype" pk="14">
+        <field name="app_label" type="CharField">data</field>
+        <field name="model" type="CharField">instance</field>
+    </object>
+    <object model="contenttypes.contenttype" pk="15">
+        <field name="app_label" type="CharField">data</field>
+        <field name="model" type="CharField">attribute</field>
+    </object>
+    <object model="contenttypes.contenttype" pk="16">
+        <field name="app_label" type="CharField">data</field>
+        <field name="model" type="CharField">amlink</field>
+    </object>
+    <object model="data.item" pk="1">
+        <field name="name" type="CharField">Award</field>
+    </object>
+    <object model="data.item" pk="2">
+        <field name="name" type="CharField">Person</field>
+    </object>
+    <object model="data.item" pk="3">
+        <field name="name" type="CharField">Film</field>
+    </object>
+    <object model="data.abstractmodel" pk="1">
+        <field name="master_item" rel="ManyToOneRel" to="data.item">1</field>
+        <field name="attribute" rel="ManyToManyRel" to="data.attribute"></field>
+        <field name="measure" rel="ManyToManyRel" to="data.measure"></field>
+        <field name="link" rel="ManyToManyRel" to="data.amlink"></field>
+    </object>
+    <object model="data.abstractmodel" pk="2">
+        <field name="master_item" rel="ManyToOneRel" to="data.item">2</field>
+        <field name="attribute" rel="ManyToManyRel" to="data.attribute"></field>
+        <field name="measure" rel="ManyToManyRel" to="data.measure"></field>
+        <field name="link" rel="ManyToManyRel" to="data.amlink"></field>
+    </object>
+    <object model="data.abstractmodel" pk="3">
+        <field name="master_item" rel="ManyToOneRel" to="data.item">3</field>
+        <field name="attribute" rel="ManyToManyRel" to="data.attribute"></field>
+        <field name="measure" rel="ManyToManyRel" to="data.measure"></field>
+        <field name="link" rel="ManyToManyRel" to="data.amlink"></field>
+    </object>
+    <object model="data.instance" pk="1">
+        <field name="abm" rel="ManyToOneRel" to="data.abstractmodel">1</field>
+        <field name="attribute" type="CharField">{"Year": "1928"}</field>
+        <field name="measure" type="CharField"></field>
+        <field name="link" rel="ManyToManyRel" to="data.instancelink"></field>
+        <field name="iil" rel="ManyToManyRel" to="data.incominginteractionlink"></field>
+    </object>
+    <object model="data.instance" pk="2">
+        <field name="abm" rel="ManyToOneRel" to="data.abstractmodel">2</field>
+        <field name="attribute" type="CharField">{"Age": "44", "Name": "Emil Jannings"}</field>
+        <field name="measure" type="CharField"></field>
+        <field name="link" rel="ManyToManyRel" to="data.instancelink"></field>
+        <field name="iil" rel="ManyToManyRel" to="data.incominginteractionlink"></field>
+    </object>
+    <object model="data.instance" pk="3">
+        <field name="abm" rel="ManyToOneRel" to="data.abstractmodel">3</field>
+        <field name="attribute" type="CharField">{"Movie": "The Last Command, The Way of All Flesh"}</field>
+        <field name="measure" type="CharField"></field>
+        <field name="link" rel="ManyToManyRel" to="data.instancelink"></field>
+        <field name="iil" rel="ManyToManyRel" to="data.incominginteractionlink"></field>
+    </object>
+    <object model="data.instance" pk="4">
+        <field name="abm" rel="ManyToOneRel" to="data.abstractmodel">1</field>
+        <field name="attribute" type="CharField">{"Year": "1929"}</field>
+        <field name="measure" type="CharField"></field>
+        <field name="link" rel="ManyToManyRel" to="data.instancelink"></field>
+        <field name="iil" rel="ManyToManyRel" to="data.incominginteractionlink"></field>
+    </object>
+    <object model="data.instance" pk="5">
+        <field name="abm" rel="ManyToOneRel" to="data.abstractmodel">2</field>
+        <field name="attribute" type="CharField">{"Age": "41", "Name": "Warner Baxter"}</field>
+        <field name="measure" type="CharField"></field>
+        <field name="link" rel="ManyToManyRel" to="data.instancelink"></field>
+        <field name="iil" rel="ManyToManyRel" to="data.incominginteractionlink"></field>
+    </object>
+    <object model="data.instance" pk="6">
+        <field name="abm" rel="ManyToOneRel" to="data.abstractmodel">3</field>
+        <field name="attribute" type="CharField">{"Movie": "In Old Arizona"}</field>
+        <field name="measure" type="CharField"></field>
+        <field name="link" rel="ManyToManyRel" to="data.instancelink"></field>
+        <field name="iil" rel="ManyToManyRel" to="data.incominginteractionlink"></field>
+    </object>
+</django-objects>

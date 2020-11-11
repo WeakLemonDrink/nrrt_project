@@ -47,9 +47,9 @@ class InstanceSerializer(serializers.ModelSerializer):
     Serializer for the `Instance` model
     '''
 
-    abm = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name='data:abstractmodel-detail'
-    )
+    # abm = serializers.HyperlinkedRelatedField(
+    #     read_only=True, view_name='data:abstractmodel-detail'
+    # )
     item = serializers.CharField(source='abm.master_item')
 
     class Meta:

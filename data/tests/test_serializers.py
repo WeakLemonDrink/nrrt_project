@@ -542,3 +542,47 @@ class AbstractModelSerializerTests(TestCase):
         # Check to see that this has created a new `AbstractModel` entry with 2 `Link`
         # entries m2m
         self.assertEqual(entry.link.all().count(), 2)
+
+
+class InstanceSerializerTests(TestCase):
+    '''
+    TestCase class for the `InstanceSerializer` serializer
+    '''
+
+    fixtures = [
+        './doc/instanceserializertests.xml'
+    ]
+
+    def test_serializer_serializes_multiple_entries(self):
+        '''
+        `InstanceSerializer` should serialize multiple `Instance` entries
+        '''
+
+        # Load the json blob defined at ./doc/instanceserializertests.json
+        with open(os.path.join(settings.BASE_DIR, 'doc', 'instanceserializertests.json')) as f: # pylint: disable=invalid-name
+            expected_json = json.load(f)
+
+        # Grab the created `Instance` entries
+        instance_qs = models.Instance.objects.all()
+
+        serializer = serializers.InstanceSerializer(instance_qs, many=True)
+
+        self.assertEqual(serializer.data, expected_json)
+
+    def test_serializer_serializes_single_entry(self):
+        '''
+        `InstanceSerializer` should serialize a single `Instance` entry
+        '''
+
+        expected_json = {
+            "item": "Award",
+            "id": 1,
+            "abm": 1,
+            "attribute": "{\"Year\": \"1928\"}",
+            "measure": "",
+            "link": []
+        }
+
+        serializer = serializers.InstanceSerializer(models.Instance.objects.get(id=1))
+
+        self.assertEqual(serializer.data, expected_json)

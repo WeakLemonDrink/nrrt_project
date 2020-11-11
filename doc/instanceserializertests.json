@@ -1,0 +1,50 @@
+[
+	{
+		"item": "Award",
+		"id": 1,
+		"abm": 1,
+		"attribute": "{\"Year\": \"1928\"}",
+		"measure": "",
+		"link": []
+	},
+	{
+		"item": "Person",
+		"id": 2,
+		"abm": 2,
+		"attribute": "{\"Age\": \"44\", \"Name\": \"Emil Jannings\"}",
+		"measure": "",
+		"link": []
+	},
+	{
+		"item": "Film",
+		"id": 3,
+		"abm": 3,
+		"attribute": "{\"Movie\": \"The Last Command, The Way of All Flesh\"}",
+		"measure": "",
+		"link": []
+	},
+	{
+		"item": "Award",
+		"id": 4,
+		"abm": 1,
+		"attribute": "{\"Year\": \"1929\"}",
+		"measure": "",
+		"link": []
+	},
+	{
+		"item": "Person",
+		"id": 5,
+		"abm": 2,
+		"attribute": "{\"Age\": \"41\", \"Name\": \"Warner Baxter\"}",
+		"measure": "",
+		"link": []
+	},
+	{
+		"item": "Film",
+		"id": 6,
+		"abm": 3,
+		"attribute": "{\"Movie\": \"In Old Arizona\"}",
+		"measure": "",
+		"link": []
+	}
+]
