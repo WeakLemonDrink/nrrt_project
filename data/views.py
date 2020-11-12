@@ -11,7 +11,7 @@ from django.views.generic.base import ContextMixin, View
 
 from rest_framework import viewsets
 
-from data import forms, models, serializers
+from data import forms, helpers, models, serializers
 
 
 class AbstractModelViewSet(viewsets.ModelViewSet): # pylint: disable=too-many-ancestors
@@ -99,6 +99,14 @@ class UploadCsvFileView(ContextMixin, View):
         if form.is_valid():
 
             new_entries = form.save()
+
+            # Get the unique `Item` entries out of the returned instances
+            item_qs = models.Item.objects.filter(
+                id__in=[e.abm.master_item.id for e in new_entries]
+            )
+
+            # Update `RankingCluster` entries with ranking_features=NULL
+            helpers.update_ranking_clusters(item_qs)
 
             # Create the success message
             messages.add_message(

@@ -7,12 +7,13 @@ import json
 import os
 
 from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 
 from rest_framework import status
 
-from data import serializers
+from data import models, serializers
 
 
 class AbstractModelViewSetTests(TestCase):
@@ -86,6 +87,11 @@ class UploadCsvFileViewTests(TestCase):
     TestCase class for the `UploadCsvFileView` view
     '''
 
+    fixtures = [
+        './doc/test_data/item.xml',
+        './doc/test_data/abstractmodel.xml'
+    ]
+
     def setUp(self):
         '''
         Common setup for each test definition
@@ -105,9 +111,48 @@ class UploadCsvFileViewTests(TestCase):
         # Confirm the response is 200 (OK)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_view_post_upload_file_should_be_csv(self):
+    def test_view_post_valid_upload_file_and_abm_match_json(self):
         '''
-        `UploadCsvFileView` view should return a input view following a `get` request
+        `UploadCsvFileView` view should create new `Instance` entries following a `post` request
+        with valid data
 
-        Response should return 200
+        Response should redirect to the data:upload-csv view on success
         '''
+
+        upload_file = open(
+            os.path.join(settings.BASE_DIR, 'doc', 'test_data', 'oscar_winners.csv'), 'rb'
+        )
+
+        upload_data = {
+            'abm_match_json': '{"Year": "1", "Age": "2", "Name": "2", "Movie": "3"}',
+            'upload_file': SimpleUploadedFile(upload_file.name, upload_file.read())
+        }
+
+        response = self.client.post(self.request_url, upload_data, follow=True)
+
+        # Successful upload of file should redirect to the `ContractNotice` list view
+        self.assertRedirects(response, self.request_url)
+
+    def test_view_post_creates_ranking_clusters(self):
+        '''
+        `UploadCsvFileView` view should create new `Instance` entries following a `post` request
+        with valid data
+
+        `post` method should call `update_ranking_clusters` method to create new `RankingCluster`
+        entries related to the new `Instances`
+        '''
+
+        upload_file = open(
+            os.path.join(settings.BASE_DIR, 'doc', 'test_data', 'oscar_winners.csv'), 'rb'
+        )
+
+        upload_data = {
+            'abm_match_json': '{"Year": "1", "Age": "2", "Name": "2", "Movie": "3"}',
+            'upload_file': SimpleUploadedFile(upload_file.name, upload_file.read())
+        }
+
+        self.client.post(self.request_url, upload_data)
+
+        # Successful upload of file should create three new ranking clusters with
+        # `ranking_feature` == `NULL`
+        self.assertTrue(models.RankingCluster.objects.filter(ranking_feature='NULL').count(), 3)
