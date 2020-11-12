@@ -322,8 +322,6 @@ class AbstractModelSerializerTests(TestCase):
     TestCase class for the `AbstractModelSerializer` serializer
     '''
 
-    maxDiff = None
-
     def setUp(self):
         '''
         Common setup for each test definition

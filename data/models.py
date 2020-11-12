@@ -214,7 +214,7 @@ class RankingCluster(models.Model):
     '''
 
     master_item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    ranking_feature = models.JSONField(null=True, blank=True)
+    ranking_feature = models.JSONField()
     number_of_instances = models.PositiveIntegerField(null=True, blank=True)
     instances_ranking = models.JSONField(null=True, blank=True)
     links_ranking = models.JSONField(null=True, blank=True)
