@@ -13,6 +13,159 @@ from django.test import TestCase
 from data import forms, models
 
 
+class RetrieveDataFormTests(TestCase):
+    '''
+    TestCase class for the `RetrieveDataForm` form
+    '''
+
+    fixtures = [
+        './doc/instanceserializertests.xml'
+    ]
+
+    def test_form_raises_error_data_request_not_json(self):
+        '''
+        `RetrieveDataForm` `.is_valid()` method should raise an error if the data_request data is
+        invalid. `data_request` data should be in the form e.g.:
+
+        {
+            "UOA": "Film",
+            "Book": {...},
+            "Person": {...},
+            "Review": {...},
+            "Country": {...}
+        }
+
+        If the data attached to `data_request` field is not json, raise an error
+        '''
+
+        # Instantiate the form
+        form = forms.RetrieveDataForm({'data_request': 'hello!'})
+
+        # Confirm calling the `.is_valid()` method raises the correct error
+        form.is_valid()
+
+        self.assertEqual(
+            form.errors['data_request'], ['Expecting value: line 1 column 1 (char 0)']
+        )
+
+    def test_form_raises_error_data_request_no_uoa_key(self):
+        '''
+        `RetrieveDataForm` `.is_valid()` method should raise an error if the data_request data is
+        invalid. `data_request` data should be in the form e.g.:
+
+        {
+            "UOA": "Film",
+            "Book": {...},
+            "Person": {...},
+            "Review": {...},
+            "Country": {...}
+        }
+
+        If the data attached to `data_request` field does not contain the "UOA" key, raise an error
+        '''
+
+        # Instantiate the form with some valid json, but without "UOA" key
+        form = forms.RetrieveDataForm(
+            {'data_request': '{"Year": "1", "Age": "2", "Name": "2", "Movie": "3"}'}
+        )
+
+        # Confirm calling the `.is_valid()` method raises the correct error
+        form.is_valid()
+
+        self.assertEqual(
+            form.errors['data_request'], ['Input json doesn''t contain a "UOA" key.'] # pylint: disable=implicit-str-concat
+        )
+
+    def test_form_raises_error_data_request_uoa_value_no_item_exists(self):
+        '''
+        `RetrieveDataForm` `.is_valid()` method should raise an error if the data_request data is
+        invalid. `data_request` data should be in the form e.g.:
+
+        {
+            "UOA": "Film",
+            "Book": {...},
+            "Person": {...},
+            "Review": {...},
+            "Country": {...}
+        }
+
+        If the data attached to `data_request` field contains the "UOA" key, but the value
+        associated with this key is not a valid `Item` entry, raise an error
+        '''
+
+        # Instantiate the form with some valid json, with "UOA" key but an invalid `Item` value
+        form = forms.RetrieveDataForm(
+            {'data_request': '{"UOA": "Junk"}'}
+        )
+
+        # Confirm calling the `.is_valid()` method raises the correct error
+        form.is_valid()
+
+        self.assertEqual(
+            form.errors['data_request'], ['"Junk" Item does not exist.']
+        )
+
+    def test_form_raises_error_data_request_book_value_not_a_dict(self):
+        '''
+        `RetrieveDataForm` `.is_valid()` method should raise an error if the data_request data is
+        invalid. `data_request` data should be in the form e.g.:
+
+        {
+            "UOA": "Film",
+            "Book": {...},
+            "Person": {...},
+            "Review": {...},
+            "Country": {...}
+        }
+
+        If the data attached to `data_request` field contains a valid "UOA" key value pair, but
+        the other key value pairs do not have a dictionary in their values, raise an error
+        '''
+
+        # Instantiate the form with some valid json, with valid "UOA" key and valid but invalid
+        # "Book" value (not a dictionary)
+        form = forms.RetrieveDataForm(
+            {'data_request': '{"UOA": "Film", "Book": "Junk"}'}
+        )
+
+        # Confirm calling the `.is_valid()` method raises the correct error
+        form.is_valid()
+
+        self.assertEqual(
+            form.errors['data_request'], ['"Book" value is not a dictionary.']
+        )
+
+    def test_form_raises_error_data_request_book_value_dict_bad_keys(self):
+        '''
+        `RetrieveDataForm` `.is_valid()` method should raise an error if the data_request data is
+        invalid. `data_request` data should be in the form e.g.:
+
+        {
+            "UOA": "Film",
+            "Book": {...},
+            "Person": {...},
+            "Review": {...},
+            "Country": {...}
+        }
+
+        If the data attached to `data_request` field contains a valid "UOA" key value pair, but
+        the other key value pairs do not have a dictionary in their values, raise an error
+        '''
+
+        # Instantiate the form with some valid json, with valid "UOA" key and valid but invalid
+        # "Book" value (not a dictionary)
+        form = forms.RetrieveDataForm(
+            {'data_request': '{"UOA": "Film", "Book": {"Junk": "asd", "silly": "2"}}'}
+        )
+
+        # Confirm calling the `.is_valid()` method raises the correct error
+        form.is_valid()
+
+        self.assertEqual(
+            form.errors['data_request'],
+            [r'"Book" value dictionary doesn''t contain "ATTR", "MEAS" or "LINK" key(s).'] # pylint: disable=implicit-str-concat
+        )
+
 class UploadCsvFileFormTests(TestCase):
     '''
     TestCase class for the `UploadCsvFileForm` form

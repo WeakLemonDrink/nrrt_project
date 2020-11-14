@@ -1,0 +1,20 @@
+{
+    "UOA": "Book",
+    "Book": {
+        "ATTR": ["title", "category"],
+        "MEAS": [],
+        "LINK": ["(Book)<-[WRITTEN_BY]-(Person)","(Book)<-[ABOUT]-(Review)"]
+    },
+    "Person": {
+        "ATTR": ["name"],
+        "MEAS": ["date_of_birth"],
+        "LINK": ["(Person)-[BORN]->(Country)"]
+    },
+    "Review": {
+        "ATTR": [],
+        "MEAS": ["AVG(score)"]
+    },
+    "Country": {
+        "ATTR": ["name"]
+  }
+}

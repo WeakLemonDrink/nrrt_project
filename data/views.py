@@ -69,6 +69,45 @@ class MeasureViewSet(viewsets.ModelViewSet): # pylint: disable=too-many-ancestor
     serializer_class = serializers.MeasureSerializer
 
 
+class RetreiveDataView(ContextMixin, View):
+    '''
+    View to return data based on an incoming request
+    '''
+
+    form_class = forms.RetrieveDataForm
+    template_name = 'data/retrieve_data.html'
+
+    def get(self, request):
+        '''
+        Renders the new form so user can upload data when get request
+        '''
+
+        # Build context ready to pass to render
+        context = self.get_context_data(form=self.form_class())
+
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        '''
+        Handles post data and returns any related data
+        '''
+
+        form = self.form_class(request.POST)
+
+        # If data entered is valid, return data
+        if form.is_valid():
+            pass
+
+        else:
+            # If not valid, return the form with associated errors
+            # Build context ready to pass to render
+            context = self.get_context_data(form=form)
+
+            response = render(request, self.template_name, context)
+
+        return response
+
+
 class UploadCsvFileView(ContextMixin, View):
     '''
     View to handle incoming csvs of instance data.

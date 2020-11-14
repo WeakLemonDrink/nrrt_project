@@ -13,6 +13,88 @@ from django.conf import settings
 from data import models
 
 
+class RetrieveDataForm(forms.Form):
+    '''
+    Form provides a field for a user to upload a data request json blob
+
+    If inputed data is valid, return `is_valid()` is `True`
+    '''
+
+    data_request = forms.CharField(required=True, widget=forms.Textarea)
+
+    def __init__(self, *args, **kwargs):
+        '''
+        Override superclass init to initialise class atttributes required later
+        '''
+
+        # Default init
+        super().__init__(*args, **kwargs)
+
+        self.data_request = None
+        self.uoa = None
+
+    def clean_data_request(self):
+        '''
+        Override field clean to check the input data_request:
+         * is actually json
+         * contains the key "UOA" required to map to `RankingCluster` `master_item` field
+         * Value in the "UOA" key is a valid `Item`
+         * Other key value pairs are dicts with "ATTR", "MEAS" and "LINK"
+        '''
+
+        data_request_json = self.cleaned_data['data_request']
+
+        # Check the input data is actually json
+        try:
+            self.data_request = json.loads(data_request_json)
+
+        except json.JSONDecodeError as err:
+            # If input data is not json, raise error
+            self.add_error('data_request', [err])
+
+        # Now check if the json data is valid
+        if self.data_request: # pylint: disable=too-many-nested-blocks
+            # Check the uoa and pop
+            if self.data_request.get('UOA', None):
+                # Check that UOA value is a valid `Item`
+                # Pop out "UOA" as we don't need it anymore
+                uoa = self.data_request.pop('UOA')
+
+                if models.Item.objects.filter(name=uoa).exists():
+                    # Update uoa with the `Item` entry
+                    self.uoa = models.Item.objects.get(name=uoa)
+
+                else:
+                    # If `Item doesn't exist, raise error
+                    self.add_error('data_request', '"' + uoa + '" Item does not exist.')
+
+            else:
+                # If data doesn't contain uoa key raise error
+                self.add_error('data_request', 'Input json doesn''t contain a "UOA" key.')
+
+
+            # Check the other key value pairs if the uoa is valid
+            if self.uoa:
+                for key, value in self.data_request.items():
+                    # Check if the value is a dict
+                    if isinstance(value, dict):
+                        for k in value.keys():
+                            if k not in ['ATTR', 'MEAS', 'LINK']:
+                                self.add_error(
+                                    'data_request',
+                                    '"' + key + '" value dictionary doesn''t contain "ATTR", ' +
+                                    '"MEAS" or "LINK" key(s).'
+                                )
+
+                                # Break, we don't need to raise this error more than once
+                                break
+
+                    else:
+                        self.add_error('data_request', '"' + key + '" value is not a dictionary.')
+
+        return data_request_json
+
+
 class UploadCsvFileForm(forms.Form):
     '''
     Form provides fields for a user to upload a csv file containing instance data, plus extra data
