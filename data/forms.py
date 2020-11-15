@@ -94,6 +94,28 @@ class RetrieveDataForm(forms.Form):
 
         return data_request_json
 
+    def retrieve_instances(self):
+        '''
+        Get relevant instance data based on the input `data_request`
+
+        `data_request` json should be validated first before calling this function
+        '''
+
+        # Return empty queryset by default
+        retrieved_instances = models.Instance.objects.none()
+
+        # Check if `is_valid()` has been called to validate the input `data_request`
+        if not self.cleaned_data:
+            raise ValueError('is_valid() must be called before return_data().')
+
+        # Check if there are any errors associated with the input `data_request`
+        if self.errors:
+            raise ValueError(
+                'return_data() cannot be called because input form data didn''t validate.'
+            )
+
+        return retrieved_instances
+
 
 class UploadCsvFileForm(forms.Form):
     '''

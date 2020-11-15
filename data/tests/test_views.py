@@ -82,6 +82,54 @@ class AbstractModelViewSetTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
+class RetrieveDataViewTests(TestCase):
+    '''
+    TestCase class for the `RetreiveDataView` view
+    '''
+
+    fixtures = [
+        './doc/instanceserializertests.xml'
+    ]
+
+    def setUp(self):
+        '''
+        Common setup for each test definition
+        '''
+
+        self.request_url = reverse('data:retrieve-data')
+
+    def test_view_get_method_returns_ok(self):
+        '''
+        `RetreiveDataView` view should return a input view following a `get` request
+
+        Response should return 200
+        '''
+
+        response = self.client.get(self.request_url)
+
+        # Confirm the response is 200 (OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_view_post_valid_data_request_data(self):
+        '''
+        `RetreiveDataView` view should return serialized related `Instance` entries if valid
+        `data_request` json data is posted
+        '''
+
+        # Create a Book `Item` entry to satisfy code
+        models.Item.objects.create(name='Book')
+
+        # Load the data_request json defined at
+        # https://www.notion.so/To-do-list-c7fa657a21524f73b91c966e6740b759
+        with open(os.path.join(settings.BASE_DIR, 'doc', 'data_request.json')) as f: # pylint: disable=invalid-name
+            data_request = json.load(f)
+
+        response = self.client.post(self.request_url, {'data_request': data_request})
+
+        # Valid data should return serialized `Instance` data and 200 code to indicate ok
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
 class UploadCsvFileViewTests(TestCase):
     '''
     TestCase class for the `UploadCsvFileView` view

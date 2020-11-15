@@ -4,12 +4,12 @@ Defines all views for the `data` django app
 
 
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic.base import ContextMixin, View
 
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 
 from data import forms, helpers, models, serializers
 
@@ -69,7 +69,7 @@ class MeasureViewSet(viewsets.ModelViewSet): # pylint: disable=too-many-ancestor
     serializer_class = serializers.MeasureSerializer
 
 
-class RetreiveDataView(ContextMixin, View):
+class RetrieveDataView(ContextMixin, View):
     '''
     View to return data based on an incoming request
     '''
@@ -94,9 +94,24 @@ class RetreiveDataView(ContextMixin, View):
 
         form = self.form_class(request.POST)
 
-        # If data entered is valid, return data
+        # If data entered is valid, retrieve `Instance` entries
         if form.is_valid():
-            pass
+
+            instances_qs = form.retrieve_instances()
+
+            if instances_qs.exists():
+                # Serialize queryset and return
+                serializer = serializers.InstanceSerializer(instances_qs, many=True)
+
+                return_data = serializer.data
+                status_code = status.HTTP_200_OK
+
+            else:
+                # If no valid `Instance` queryset, return nothing
+                return_data = []
+                status_code = status.HTTP_204_NO_CONTENT
+
+            response = JsonResponse(return_data, status_code=status_code)
 
         else:
             # If not valid, return the form with associated errors

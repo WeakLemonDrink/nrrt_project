@@ -163,8 +163,51 @@ class RetrieveDataFormTests(TestCase):
 
         self.assertEqual(
             form.errors['data_request'],
-            [r'"Book" value dictionary doesn''t contain "ATTR", "MEAS" or "LINK" key(s).'] # pylint: disable=implicit-str-concat
+            ['"Book" value dictionary doesn''t contain "ATTR", "MEAS" or "LINK" key(s).'] # pylint: disable=implicit-str-concat
         )
+
+    def test_form_is_valid_true_data_request_valid_data(self):
+        '''
+        `RetrieveDataForm` `.is_valid()` method should return `True` if the submitted data is
+        valid. `data_request` data should be in the form e.g.:
+
+        {
+            "UOA": "Book",
+            "Book": {
+                "ATTR": ["title", "category"],
+                "MEAS": [],
+                "LINK": ["(Book)<-[WRITTEN_BY]-(Person)","(Book)<-[ABOUT]-(Review)"]
+            },
+            "Person": {
+                "ATTR": ["name"],
+                "MEAS": ["date_of_birth"],
+                "LINK": ["(Person)-[BORN]->(Country)"]
+            },
+            "Review": {
+                "ATTR": [],
+                "MEAS": ["AVG(score)"]
+            },
+            "Country": {
+                "ATTR": ["name"]
+            }
+        }
+        '''
+
+        # Create a Book `Item` entry to satisfy code
+        models.Item.objects.create(name='Book')
+
+        # Load the data_request json defined at
+        # https://www.notion.so/To-do-list-c7fa657a21524f73b91c966e6740b759
+        with open(os.path.join(settings.BASE_DIR, 'doc', 'data_request.json')) as f: # pylint: disable=invalid-name
+            data_request = json.load(f)
+
+        # Instantiate the form with some valid json, with valid "UOA" key and valid but invalid
+        # "Book" value (not a dictionary)
+        form = forms.RetrieveDataForm({'data_request': json.dumps(data_request)})
+
+        # Confirm data is valid
+        self.assertTrue(form.is_valid())
+
 
 class UploadCsvFileFormTests(TestCase):
     '''

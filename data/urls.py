@@ -21,6 +21,7 @@ router.register('instance', views.InstanceViewSet)
 router.register('measure', views.MeasureViewSet)
 
 urlpatterns = [
+	path('retrieve-data', views.RetrieveDataView.as_view(), name='retrieve-data'),
 	path('upload-csv/', views.UploadCsvFileView.as_view(), name='upload-csv'),
     path('', include(router.urls)),
 ]
